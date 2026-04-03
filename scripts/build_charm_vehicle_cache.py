@@ -52,6 +52,21 @@ def split_model_engine(rest_after_make: str) -> tuple[str, str]:
 LINK_RE = re.compile(r'<li><a href="(/[^"]+/)">([^<]+)</a>')
 
 
+def label_from_charm_href_path(path: str) -> str:
+    """
+    charm.li year pages use <a> text that is sometimes only the engine line under a
+    plain-text group title (e.g. link text \"V8-5.3L VIN T\" under \"Avalanche 1500 2WD\").
+    The href path always includes the full variant after /Make/year/.
+    """
+    raw = (path or "").strip()
+    if not raw.startswith("/"):
+        raw = "/" + raw
+    parts = [p for p in raw.split("/") if p]
+    if len(parts) < 3:
+        return ""
+    return urllib.parse.unquote("/".join(parts[2:])).strip()
+
+
 def fetch(url: str) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=90) as resp:
@@ -65,12 +80,20 @@ def charm_make_path_segment(charm_name: str) -> str:
 
 def parse_vehicle_rows(html: str) -> list[dict]:
     rows: list[dict] = []
-    for path, label in LINK_RE.findall(html):
-        label = label.strip()
-        if not label or not path.startswith("/"):
+    seen: set[str] = set()
+    for path, link_text in LINK_RE.findall(html):
+        if not path.startswith("/"):
             continue
-        # Expect /Make/year/Variant.../
-        parts = [p for p in path.split("/") if p]
+        norm_path = path if path.endswith("/") else path + "/"
+        if norm_path in seen:
+            continue
+        seen.add(norm_path)
+        label = label_from_charm_href_path(norm_path)
+        if not label:
+            label = link_text.strip()
+        if not label:
+            continue
+        parts = [p for p in norm_path.split("/") if p]
         if len(parts) < 3:
             continue
         pm, pe = split_model_engine(label)
@@ -78,7 +101,7 @@ def parse_vehicle_rows(html: str) -> list[dict]:
             pm = label
         rows.append(
             {
-                "path": path if path.endswith("/") else path + "/",
+                "path": norm_path,
                 "label": label,
                 "pickerModel": pm,
                 "pickerEngine": pe,
