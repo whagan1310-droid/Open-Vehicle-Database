@@ -1,10 +1,10 @@
 # Open Vehicle Database
 
-**Code and scripts:** All **software** in this repository—`scripts/`, the **`catalog/`** picker, build tooling, and automation—is written and maintained by **Gam3rGoon** and **MasterTech-Pro**. **Operation CHARM** and **Xerostatic** (Open Labor Project) **did not** author this codebase; they appear only as **inspiration**, **ecosystem context**, and (where applicable) **attributed manual sources** or links to their sites. What comes from where is spelled out in **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
+**Code and scripts:** All **software** in this repository—`scripts/`, the **`catalog/`** picker, build tooling, and automation—is written and maintained by **Gam3rGoon** and **MasterTech-Pro**. **Operation CHARM** and **Xerostatic** ([**ShopBase**](https://shopbasehq.com/), **[Open Labor Project](https://openlaborproject.com/)**) **did not** author this codebase; they appear only as **inspiration**, **ecosystem context**, and (where applicable) **attributed manual sources** or links to their sites. What comes from where is spelled out in **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
 
-A community-driven, **free** automotive knowledge library—built in the spirit of **MasterTech-Pro**, **[Open Labor Project](https://openlaborproject.com/)** (Xerostatic), **[Operation CHARM](https://charm.li/)**, and the broader **open repair-data** movement. Contributors are always welcome in the open realm of **equal right to repair**: *by the people, for the people*—so that repair information stays accessible instead of locked behind paywalls and gatekeeping.
+A community-driven, **free** automotive knowledge library—built in the spirit of **MasterTech-Pro**, **[ShopBase](https://shopbasehq.com/)**, **[Open Labor Project](https://openlaborproject.com/)**, **[Operation CHARM](https://charm.li/)**, and the broader **open repair-data** movement. Contributors are always welcome in the open realm of **equal right to repair**: *by the people, for the people*—so that repair information stays accessible instead of locked behind paywalls and gatekeeping.
 
-**Attribution and inspirations** (CHARM, Open Labor Project, catalog picker notes) are summarized in **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
+**Attribution and inspirations** (CHARM, **[ShopBase](https://shopbasehq.com/)**, **[Open Labor Project](https://openlaborproject.com/)**, catalog picker notes) are summarized in **[ATTRIBUTION.md](./ATTRIBUTION.md)**. Inspiration from **[plowman/open-vehicle-db](https://github.com/plowman/open-vehicle-db)**.
 
 ---
 
@@ -24,7 +24,7 @@ We have asked the same question many times: *How do we make this library useful 
 
 Our answer has **two parts**:
 
-1. **Xerostatic** — creator of **[Open Labor Project](https://openlaborproject.com/)** — offers **free, web-based shop management** (including **ShopBase**) in the same category as tools like Mitchell1, ShopKey, and ShopMonkey, so data and workflows can live where shops already work. Learn more at [openlaborproject.com](https://openlaborproject.com/). *This repo is independent from Open Labor Project’s datasets; we cite Xerostatic and OLP as **inspiration** and ecosystem kinship—see [ATTRIBUTION.md](./ATTRIBUTION.md).*
+1. **Xerostatic** — **[ShopBase](https://shopbasehq.com/)**, **[Open Labor Project](https://openlaborproject.com/)** — offers **free, web-based shop management** in the same category as tools like Mitchell1, ShopKey, and ShopMonkey, so data and workflows can live where shops already work. Learn more at [shopbasehq.com](https://shopbasehq.com/) and [openlaborproject.com](https://openlaborproject.com/). *This repo is independent from **[Open Labor Project](https://openlaborproject.com/)**’s datasets; we cite Xerostatic, **[ShopBase](https://shopbasehq.com/)**, and OLP as **inspiration** and ecosystem kinship—see [ATTRIBUTION.md](./ATTRIBUTION.md).*
 
 2. **Gam3rGoon** — builds **custom, multi-platform applications** (Windows, macOS, Android, iOS) with add-on solutions tailored to business needs, including an **Android-based OBD2 scanner** (coming soon), so the library and related tooling can meet people on the devices they already use.
 
@@ -36,14 +36,14 @@ Together, the aim is for this growing library to be **something you can build on
 
 | Resource | How we relate to it |
 |----------|---------------------|
-| **[Open Labor Project](https://openlaborproject.com/)** (Xerostatic) | **Inspiration & ecosystem alignment** — free labor, specs, DTCs, and shop tools. We **thank and credit** Xerostatic; we do **not** ship OLP data here. |
+| **[ShopBase](https://shopbasehq.com/)**, **[Open Labor Project](https://openlaborproject.com/)** | **Inspiration & ecosystem alignment** — free labor, specs, DTCs, and shop tools. We **thank and credit** Xerostatic; we do **not** ship OLP data here. |
 | **[Operation CHARM (charm.li)](https://charm.li/)** | **Manual content** — CHARM exports in this repo (e.g. under `Acura/`) should be **attributed** per CHARM’s terms. See [ATTRIBUTION.md](./ATTRIBUTION.md). |
 | **[plowman/open-vehicle-db](https://github.com/plowman/open-vehicle-db)** | **Past inspiration** for a structured vehicle picker; **we do not redistribute their JSON.** The `catalog/` picker uses **your folder names** only. |
-| **MasterTech-Pro** | **Values / lineage** — professional, technician-focused tooling as a guiding reference. |
+| **MasterTech-Pro (Gam3rGoon)** | **Values / lineage** — professional, technician-focused tooling as a guiding reference. |
 
 ---
 
-## Vehicle catalog (CHARM picker)
+## Vehicle catalog (CHARM picker) — Built by Gam3rGoon
 
 The **`catalog/`** site is a **Make → Year → Model → Engine** picker.
 
