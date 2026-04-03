@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vehicle catalog → CHARM manuals</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>Pick a vehicle</h1>
+      <p class="lede">
+        Choices are built from <strong>your</strong> Operation CHARM exports in this repo (folder names
+        under e.g. <code>Acura/</code>). Run <code>scripts/build_charm_manifest.py</code> after adding
+        exports. Manuals remain full CHARM sites — open a link to use their navigation.
+        See <a href="../ATTRIBUTION.md">ATTRIBUTION.md</a> for Operation CHARM credit,
+        <a href="https://openlaborproject.com/">Open Labor Project</a> (Xerostatic) and other inspirations.
+      </p>
+    </header>
+
+    <main class="main">
+      <section class="controls" aria-label="Vehicle filters">
+        <div class="field">
+          <label for="make">Make</label>
+          <select id="make" disabled>
+            <option value="">Loading…</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="year">Year</label>
+          <select id="year" disabled>
+            <option value="">—</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="model">Model</label>
+          <select id="model" disabled>
+            <option value="">—</option>
+          </select>
+        </div>
+        <div class="field field-wide">
+          <label for="engine">Engine <span class="hint">(from folder title)</span></label>
+          <select id="engine" disabled>
+            <option value="">—</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="results" aria-live="polite">
+        <h2>Manual</h2>
+        <p id="status" class="status">Load data to search.</p>
+        <ul id="manual-list" class="manual-list hidden"></ul>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        <strong>Setup:</strong>
+        <code>python scripts/build_charm_manifest.py</code>, then serve the repo root
+        (<code>python -m http.server 8080</code>) and open <code>/catalog/</code>. Add CHARM folders
+        and list them in <code>charm-manifest.config.json</code> (<code>charmDirs</code>).
+      </p>
+      <p class="attribution">
+        Manual content: <a href="https://charm.li/" rel="noopener">Operation CHARM</a>
+        — attribute per their terms; see <a href="../ATTRIBUTION.md">ATTRIBUTION.md</a>.
+      </p>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
