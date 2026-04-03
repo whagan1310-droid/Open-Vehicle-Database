@@ -1,6 +1,7 @@
 /**
- * Vehicle picker built only from charm-manual-index.json (CHARM export paths).
- * Year / make / model / engine are parsed from folder titles in build_charm_manifest.py.
+ * Vehicle picker: local CHARM exports (charm-manual-index.json) +
+ * Operation CHARM coverage (charm-coverage.json) +
+ * optional charm-vehicle-cache.json (scraped charm.li year pages → model/engine → vehicle URLs).
  */
 
 async function loadJson(url) {
@@ -11,6 +12,24 @@ async function loadJson(url) {
 
 function loadCharmManifest() {
   return loadJson(new URL("charm-manual-index.json", import.meta.url).href);
+}
+
+function loadCharmCoverage() {
+  return loadJson(new URL("charm-coverage.json", import.meta.url).href);
+}
+
+async function loadCharmVehicleCache() {
+  try {
+    return await loadJson(
+      new URL("charm-vehicle-cache.json", import.meta.url).href
+    );
+  } catch {
+    return {
+      version: 1,
+      charmBaseUrl: "https://charm.li",
+      byMakeYear: {},
+    };
+  }
 }
 
 function uniqSortedStrings(arr) {
@@ -50,6 +69,42 @@ function engineLabel(key) {
   return key === ENGINE_EMPTY ? "(as listed)" : key;
 }
 
+function engineKeyRemote(row) {
+  const e = (row.pickerEngine || "").trim();
+  return e || ENGINE_EMPTY;
+}
+
+function remoteRowsForMakeYear(vehicleCache, makeKey, yearStr) {
+  const bag =
+    vehicleCache &&
+    vehicleCache.byMakeYear &&
+    vehicleCache.byMakeYear[makeKey];
+  if (!bag) return [];
+  const y = String(yearStr);
+  return bag[y] || [];
+}
+
+function remoteManualHref(vehicleCache, row) {
+  const base = (vehicleCache.charmBaseUrl || "https://charm.li").replace(
+    /\/$/,
+    ""
+  );
+  let p = row.path || "";
+  if (!p.startsWith("/")) p = "/" + p;
+  if (!p.endsWith("/")) p += "/";
+  /* charm.li serves the manual UI from the directory URL; /index.html deep links error in-browser */
+  return `${base}${p}`;
+}
+
+function charmYearUrl(coverage, coverageByKey, makeKey, yearStr) {
+  const row = coverageByKey.get(makeKey);
+  if (!row) return null;
+  const base = (coverage.charmBaseUrl || "https://charm.li").replace(/\/$/, "");
+  const y = parseInt(yearStr, 10);
+  if (Number.isNaN(y)) return null;
+  return `${base}/${encodeURIComponent(row.charmName)}/${y}/`;
+}
+
 async function main() {
   const makeSel = document.getElementById("make");
   const yearSel = document.getElementById("year");
@@ -63,9 +118,16 @@ async function main() {
   };
 
   let manuals;
+  let coverage = null;
+  const coverageByKey = new Map();
+  let vehicleCache = {
+    version: 1,
+    charmBaseUrl: "https://charm.li",
+    byMakeYear: {},
+  };
+
   try {
-    const data = await loadCharmManifest();
-    manuals = data.manuals || [];
+    manuals = (await loadCharmManifest()).manuals || [];
   } catch (e) {
     status(
       `Could not load charm-manual-index.json (${e.message}). Run scripts/build_charm_manifest.py and serve the repo root over HTTP.`
@@ -74,10 +136,34 @@ async function main() {
     return;
   }
 
-  if (!manuals.length) {
-    status("No manuals indexed. Add CHARM exports and run scripts/build_charm_manifest.py.");
-    populateSelect(makeSel, [], "Make");
-    return;
+  try {
+    coverage = await loadCharmCoverage();
+    for (const x of coverage.makes || []) {
+      coverageByKey.set(x.makeKey, x);
+    }
+  } catch {
+    coverage = null;
+  }
+
+  vehicleCache = await loadCharmVehicleCache();
+
+  function yearsFromCoverage(makeKey) {
+    const row = coverageByKey.get(makeKey);
+    return row ? row.years : [];
+  }
+
+  function mergeYearsForMake(makeKey) {
+    const fromCov = yearsFromCoverage(makeKey);
+    const fromMan = uniqSortedYears(
+      manuals.filter((row) => row.make === makeKey).map((row) => row.year)
+    );
+    return uniqSortedYears([...fromCov, ...fromMan]);
+  }
+
+  function makeLabel(makeKey) {
+    const row = coverageByKey.get(makeKey);
+    if (row) return row.charmName;
+    return makeKey.charAt(0) + makeKey.slice(1).toLowerCase();
   }
 
   function filterByMake(m) {
@@ -97,6 +183,48 @@ async function main() {
         row.year === yi &&
         (row.pickerModel || "") === mod
     );
+  }
+
+  function appendCharmYearBrowseLink(makeKey, y) {
+    const url = charmYearUrl(coverage, coverageByKey, makeKey, y);
+    if (!url) return;
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    const name = makeLabel(makeKey);
+    a.textContent = `Browse ${name} ${y} on charm.li (manual UI)`;
+    li.appendChild(a);
+    listEl.appendChild(li);
+  }
+
+  function showRemoteIndexNotAdded(makeKey, y) {
+    listEl.innerHTML = "";
+    listEl.classList.remove("hidden");
+    status(
+      "Index not yet added — this make/year is not in charm-vehicle-cache.json. Run scripts/build_charm_vehicle_cache.py (see README), or open the year page on charm.li."
+    );
+    appendCharmYearBrowseLink(makeKey, y);
+  }
+
+  function showRemoteResults(rows) {
+    listEl.innerHTML = "";
+    listEl.classList.remove("hidden");
+    for (const row of rows) {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = remoteManualHref(vehicleCache, row);
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = row.label || row.pickerModel || "Manual";
+      li.appendChild(a);
+      listEl.appendChild(li);
+    }
+  }
+
+  function remoteModelKey(row) {
+    return (row.pickerModel || "").trim() || row.label || "";
   }
 
   function showResults(rows) {
@@ -125,24 +253,27 @@ async function main() {
       yearSel.disabled = true;
       modelSel.disabled = true;
       engineSel.disabled = true;
-      showResults([]);
+      listEl.classList.add("hidden");
+      listEl.innerHTML = "";
       status("Select a make.");
       return;
     }
-    const years = uniqSortedYears(filterByMake(m).map((row) => row.year));
-    populateSelect(
-      yearSel,
-      years.map(String),
-      "Year",
-      (v) => v
-    );
+    const years = mergeYearsForMake(m);
+    if (!years.length) {
+      populateSelect(yearSel, [], "Year");
+      yearSel.disabled = true;
+      status("No years listed for this make (check charm-coverage.json and local exports).");
+      return;
+    }
+    populateSelect(yearSel, years.map(String), "Year", (v) => v);
     yearSel.disabled = false;
     populateSelect(modelSel, [], "Model");
     modelSel.disabled = true;
     populateSelect(engineSel, [], "Engine");
     engineSel.disabled = true;
-    showResults([]);
-    status("Select year and model.");
+    listEl.classList.add("hidden");
+    listEl.innerHTML = "";
+    status("Select year, then model (or charm.li).");
   };
 
   const refreshModels = () => {
@@ -153,28 +284,77 @@ async function main() {
       populateSelect(engineSel, [], "Engine");
       modelSel.disabled = true;
       engineSel.disabled = true;
-      showResults([]);
+      listEl.classList.add("hidden");
+      listEl.innerHTML = "";
       return;
     }
-    const models = uniqSortedStrings(
-      filterByMakeYear(m, y).map((row) => row.pickerModel || "")
-    );
-    populateSelect(modelSel, models, "Model");
-    modelSel.disabled = false;
-    populateSelect(engineSel, [], "Engine");
-    engineSel.disabled = true;
-    showResults([]);
-    status("Select model (and engine if more than one).");
+    const local = filterByMakeYear(m, y);
+    if (local.length) {
+      const models = uniqSortedStrings(local.map((row) => row.pickerModel || ""));
+      populateSelect(modelSel, models, "Model");
+      modelSel.disabled = false;
+      populateSelect(engineSel, [], "Engine");
+      engineSel.disabled = true;
+      listEl.classList.add("hidden");
+      listEl.innerHTML = "";
+      status("Select model (and engine if more than one).");
+    } else {
+      const remote = remoteRowsForMakeYear(vehicleCache, m, y);
+      if (!remote.length) {
+        populateSelect(modelSel, [], "Model");
+        modelSel.disabled = true;
+        populateSelect(engineSel, [], "Engine");
+        engineSel.disabled = true;
+        showRemoteIndexNotAdded(m, y);
+        return;
+      }
+      const models = uniqSortedStrings(remote.map((row) => remoteModelKey(row)));
+      populateSelect(modelSel, models, "Model");
+      modelSel.disabled = false;
+      populateSelect(engineSel, [], "Engine");
+      engineSel.disabled = true;
+      listEl.classList.add("hidden");
+      listEl.innerHTML = "";
+      status("Select model and engine, then open the manual on Operation CHARM.");
+    }
   };
 
   const refreshEngines = () => {
     const m = makeSel.value;
     const y = yearSel.value;
     const mod = modelSel.value;
-    if (!m || !y || !mod) {
+    if (!m || !y) {
       populateSelect(engineSel, [], "Engine");
       engineSel.disabled = true;
-      showResults([]);
+      return;
+    }
+    const localMy = filterByMakeYear(m, y);
+    if (!localMy.length) {
+      const remote = remoteRowsForMakeYear(vehicleCache, m, y);
+      if (!mod) {
+        populateSelect(engineSel, [], "Engine");
+        engineSel.disabled = true;
+        listEl.classList.add("hidden");
+        listEl.innerHTML = "";
+        return;
+      }
+      const subset = remote.filter((row) => remoteModelKey(row) === mod);
+      const keys = uniqSortedStrings(subset.map((row) => engineKeyRemote(row)));
+      populateSelect(engineSel, keys, "Engine", engineLabel);
+      engineSel.disabled = keys.length <= 1;
+      if (keys.length === 1) {
+        engineSel.value = keys[0];
+      } else {
+        engineSel.value = "";
+      }
+      applyEngineFilter();
+      return;
+    }
+    if (!mod) {
+      populateSelect(engineSel, [], "Engine");
+      engineSel.disabled = true;
+      listEl.classList.add("hidden");
+      listEl.innerHTML = "";
       return;
     }
     const subset = filterByMakeYearModel(m, y, mod);
@@ -194,9 +374,46 @@ async function main() {
     const y = yearSel.value;
     const mod = modelSel.value;
     const eng = engineSel.value;
-    if (!m || !y || !mod) {
-      showResults([]);
+    if (!m || !y) {
+      listEl.classList.add("hidden");
+      listEl.innerHTML = "";
+      return;
+    }
+    const localMy = filterByMakeYear(m, y);
+    if (!localMy.length) {
+      const remote = remoteRowsForMakeYear(vehicleCache, m, y);
+      if (!mod) {
+        status("Select make, year, and model.");
+        listEl.classList.add("hidden");
+        listEl.innerHTML = "";
+        return;
+      }
+      let subset = remote.filter((row) => remoteModelKey(row) === mod);
+      if (eng) {
+        subset = subset.filter((row) => engineKeyRemote(row) === eng);
+      }
+      if (!subset.length) {
+        listEl.classList.add("hidden");
+        listEl.innerHTML = "";
+        status(
+          "Index not yet added — no matching vehicle line in charm-vehicle-cache.json for this model/engine."
+        );
+        appendCharmYearBrowseLink(m, y);
+        return;
+      }
+      if (subset.length === 1) {
+        status("Open the Operation CHARM manual below (new tab).");
+      } else {
+        status(`${subset.length} manuals match — pick one below.`);
+      }
+      showRemoteResults(subset);
+      return;
+    }
+
+    if (!mod) {
       status("Select make, year, and model.");
+      listEl.classList.add("hidden");
+      listEl.innerHTML = "";
       return;
     }
     let subset = filterByMakeYearModel(m, y, mod);
@@ -204,24 +421,33 @@ async function main() {
       subset = subset.filter((row) => engineKey(row) === eng);
     }
     if (!subset.length) {
-      showResults([]);
+      listEl.classList.add("hidden");
+      listEl.innerHTML = "";
       status("No manual matched those choices.");
       return;
     }
     if (subset.length === 1) {
-      status("Open the manual below.");
+      status("Open the local manual below.");
     } else {
-      status(`${subset.length} manuals match — pick one.`);
+      status(`${subset.length} local manuals match — pick one.`);
     }
     showResults(subset);
   }
 
-  const makes = uniqSortedStrings(manuals.map((row) => row.make));
-  populateSelect(makeSel, makes, "Make", (name) =>
-    name.charAt(0) + name.slice(1).toLowerCase()
-  );
-  if (makes.length === 1) {
-    makeSel.value = makes[0];
+  const makeKeysFromCov = coverage
+    ? coverage.makes.map((x) => x.makeKey)
+    : [];
+  const makeKeysFromMan = uniqSortedStrings(manuals.map((row) => row.make));
+  const allMakeKeys = uniqSortedStrings([...makeKeysFromCov, ...makeKeysFromMan]);
+  if (!allMakeKeys.length) {
+    status("No makes in coverage or local index.");
+    populateSelect(makeSel, [], "Make");
+    return;
+  }
+
+  populateSelect(makeSel, allMakeKeys, "Make", makeLabel);
+  if (allMakeKeys.length === 1) {
+    makeSel.value = allMakeKeys[0];
   }
 
   makeSel.addEventListener("change", refreshYears);
@@ -232,7 +458,7 @@ async function main() {
   refreshYears();
   if (makeSel.value) {
     refreshModels();
-    if (yearSel.value) {
+    if (yearSel.value && modelSel.value) {
       refreshEngines();
     }
   }

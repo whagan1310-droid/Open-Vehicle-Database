@@ -43,12 +43,40 @@ Together, the aim is for this growing library to be **something you can build on
 
 ## Vehicle catalog (CHARM picker)
 
-The **`catalog/`** site is a **Year → Make → Model → Engine** picker that points to **Operation CHARM** exports in this repo (e.g. **`Acura/`**). Dropdown values are **derived from your folder names** when you run the indexer—not from a third-party vehicle database.
+The **`catalog/`** site is a **Make → Year → Model → Engine** picker.
 
-1. **Index manuals:** `python scripts/build_charm_manifest.py` — reads **`charm-manifest.config.json`** (`charmDirs`) and writes `catalog/charm-manual-index.json`.
-2. **Serve:** from the repo root, e.g. `python -m http.server 8080`, then open **`/catalog/`**.
+- **Local manuals:** when a vehicle exists under a **`charmDirs`** folder (e.g. **`Acura/`**), the indexer links to your offline **`index.html`** (folder names drive model/engine).
+- **No local export, cached listings:** **`catalog/charm-vehicle-cache.json`** is built by scraping public **`charm.li/{Make}/{year}/`** pages (see script below). The picker fills **model** and **engine** from that file and opens each vehicle’s **directory URL** on [Operation CHARM](https://charm.li/) (CHARM’s UI; you continue to the manual there).
+- **No cache row for that make/year:** the status shows **Index not yet added**, with an optional link to the **year index** on charm.li so you can still open the manual in the browser.
 
-To add more makes, add a top-level CHARM folder (e.g. `Toyota/`) and append its name to **`charmDirs`** in **`charm-manifest.config.json`**, then rebuild the manifest.
+**Setup**
+
+1. **Coverage (make/year ranges):** run `python scripts/sync_charm_coverage_from_charm_li.py` (or `python scripts/generate_charm_coverage.py`) to refresh **`catalog/charm-coverage.json`** from live [charm.li](https://charm.li/) — avoids errors in a hand-written list.
+2. **Local index:** `python scripts/build_charm_manifest.py` → **`catalog/charm-manual-index.json`**.
+3. **Vehicle cache (model/engine → remote manual URLs):** `python scripts/build_charm_vehicle_cache.py` → **`catalog/charm-vehicle-cache.json`**. Default **`--scope manifest`** only fetches years that appear in the local manifest (keeps the file small). Use **`--scope coverage`** to scrape **every** make/year from `charm-coverage.json` (many HTTP requests and a large JSON). **Resume / merge:** by default the script **loads** an existing cache and **skips** `(makeKey, year)` pairs already present; it **rewrites the JSON after each fetch** (use **`--checkpoint-every N`** to batch writes). **Ctrl+C** saves progress; re-run the **same command** to continue. **`--fresh`** (or **`--no-merge`**) starts empty; **`--refetch`** ignores the skip and re-downloads everything in scope.
+4. **Serve** the repo root (`python -m http.server 8080`) and open **`/catalog/`**.
+
+**How you refresh coverage later**
+
+```bash
+python scripts/sync_charm_coverage_from_charm_li.py
+```
+
+(or `python scripts/generate_charm_coverage.py`)
+
+That keeps the picker in sync with CHARM even if they add years or makes later, without you maintaining the big list by hand.
+
+To add more **local** makes, add a CHARM export folder and its name to **`charm-manifest.config.json`**, then rebuild the manifest.
+
+### Build plan (going further)
+
+| Phase | Goal |
+|-------|------|
+| **Now** | Picker + coverage JSON + **`build_charm_vehicle_cache.py`** + **`charm-vehicle-cache.json`** for model/engine and remote **charm.li** vehicle URLs when there is no local export. |
+| **Next** | Optional **CI on a schedule** to regenerate `charm-vehicle-cache.json` (respect CHARM’s terms and rate limits). |
+| **Later** | Small **backend proxy** (same-origin API) if you need live CHARM HTML in-app without committing huge caches. |
+| **Caution** | Browsers cannot read charm.li from `fetch()` on a static catalog (CORS); committed JSON or a server is required for deep menus. |
+| **Multi-word makes** | Local `index.html` paths use the first token after the year as `make` today (e.g. `Mercedes`). CHARM URLs use full names (e.g. `Mercedes Benz`). Until the manifest script learns multi-token makes, **charm.li** links still work; **local** rows may not merge for those makes without a small parser tweak. |
 
 Full **attribution** and **inspiration** notes: **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
 

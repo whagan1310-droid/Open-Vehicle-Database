@@ -8,7 +8,9 @@ This file summarizes **who to credit** for what, and **what inspired** this repo
 
 Service manuals reached through this repository’s CHARM-style exports (for example under `Acura/`) come from **[Operation CHARM](https://charm.li/)** ([charm.li](https://charm.li/)). Keep **clear credit** to Operation CHARM wherever you show or redistribute that content, and follow **their** terms for use and sharing.
 
-The **`catalog/`** picker does not replace CHARM; it only helps visitors find the right local `index.html` inside those exports.
+The **`catalog/`** picker does not replace CHARM; it helps visitors find the right local `index.html` when you host an export, and can **link out** to [charm.li](https://charm.li/) year pages when you do not.
+
+**`catalog/charm-coverage.json`** is generated from live [charm.li](https://charm.li/) pages (`scripts/sync_charm_coverage_from_charm_li.py` or `scripts/generate_charm_coverage.py`). It is for navigation only; manual text and layout remain CHARM’s.
 
 ---
 

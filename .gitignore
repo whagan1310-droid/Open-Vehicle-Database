@@ -1,2 +1,5 @@
 # Legacy: third-party taxonomy was briefly vendored here; catalog no longer uses it.
 catalog/data/
+
+__pycache__/
+*.py[cod]
