@@ -22,7 +22,7 @@ We **acknowledge and thank Xerostatic** for **Open Labor Project** as **major in
 
 ---
 
-## Vehicle picker data (this repository)
+## Vehicle picker data (this repository) — Built By Gam3rGoon, MasterTech-Pro
 
 The **Year / Make / Model / Engine** dropdowns in **`catalog/`** are **not** copied from any external vehicle database. They are generated from **folder names** in your CHARM exports when you run:
 
