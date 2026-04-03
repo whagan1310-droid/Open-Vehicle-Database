@@ -70,7 +70,7 @@ That keeps the picker in sync with CHARM even if they add years or makes later, 
 
 To add more **local** manuals, either add a folder name to **`charmDirs`**, or place the folder at the **repo root** and enable **`scanRepoRootForManuals`**, then rebuild the manifest.
 
-**Large PDFs:** GitHub rejects files over **100 MB**. The main John Deere TM PDF in **`JOHN-DEERE-Garden-Tractors-…`** is listed in **`.gitignore`**; keep that file on your machine (or ship it via **Releases** / another host). Run **`python scripts/build_charm_manifest.py`** after placing it so **`charm-manual-index.json`** includes the TM row.
+**Large PDFs:** GitHub rejects files over **100 MB**. If a PDF is larger than that, do not commit it (use **`.gitignore`**, **Releases**, or another host). Run **`python scripts/build_charm_manifest.py`** when adding or removing local manuals so **`charm-manual-index.json`** stays in sync.
 
 ### Build plan (going further)
 

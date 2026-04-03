@@ -3,6 +3,3 @@ catalog/data/
 
 __pycache__/
 *.py[cod]
-
-# TM PDF is ~101 MB (over GitHub’s 100 MB limit); keep a local copy or attach via Releases.
-JOHN-DEERE-Garden-Tractors-X465-X475-X485-X575-X585-TM2023-JUNE-2004-TECHNICAL-MANUAL/TM2023_Garden_Tractor_X465_X475_X485_X575_X585.pdf
