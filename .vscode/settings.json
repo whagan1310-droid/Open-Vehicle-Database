@@ -1,0 +1,6 @@
+{
+  "git.openRepositoryInParentFolders": "always",
+  "git.autoRepositoryDetection": true,
+  "git.autorefresh": true,
+  "scm.alwaysShowRepositories": true
+}
