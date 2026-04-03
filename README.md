@@ -80,6 +80,24 @@ To add more **local** makes, add a CHARM export folder and its name to **`charm-
 | **Caution** | Browsers cannot read charm.li from `fetch()` on a static catalog (CORS); committed JSON or a server is required for deep menus. |
 | **Multi-word makes** | Local `index.html` paths use the first token after the year as `make` today (e.g. `Mercedes`). CHARM URLs use full names (e.g. `Mercedes Benz`). Until the manifest script learns multi-token makes, **charm.li** links still work; **local** rows may not merge for those makes without a small parser tweak. |
 
+### How to test picker — By Gam3rGoon
+
+**Quick start** (files already in the repo)
+
+1. Open a terminal **at the repo root** (the folder that contains `catalog/`).
+2. Start a local web server, for example:
+
+   ```bash
+   python -m http.server 8080
+   ```
+
+3. In your browser go to: **http://localhost:8080/catalog/**
+4. **Make selections** in the picker (Make → Year → Model → Engine) to exercise local manuals or links out to charm.li.
+
+**Reference** — picker UI:
+
+![Vehicle picker — Pick a vehicle](catalog/vehicle-picker-reference.png)
+
 Full **attribution** and **inspiration** notes: **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
 
 ---
