@@ -1,5 +1,7 @@
 # Open Vehicle Database
 
+**Code and scripts:** All **software** in this repository—`scripts/`, the **`catalog/`** picker, build tooling, and automation—is written and maintained by **Gam3rGoon** and **MasterTech-Pro**. **Operation CHARM** and **Xerostatic** (Open Labor Project) **did not** author this codebase; they appear only as **inspiration**, **ecosystem context**, and (where applicable) **attributed manual sources** or links to their sites. What comes from where is spelled out in **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
+
 A community-driven, **free** automotive knowledge library—built in the spirit of **MasterTech-Pro**, **[Open Labor Project](https://openlaborproject.com/)** (Xerostatic), **[Operation CHARM](https://charm.li/)**, and the broader **open repair-data** movement. Contributors are always welcome in the open realm of **equal right to repair**: *by the people, for the people*—so that repair information stays accessible instead of locked behind paywalls and gatekeeping.
 
 **Attribution and inspirations** (CHARM, Open Labor Project, catalog picker notes) are summarized in **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
@@ -24,7 +26,7 @@ Our answer has **two parts**:
 
 1. **Xerostatic** — creator of **[Open Labor Project](https://openlaborproject.com/)** — offers **free, web-based shop management** (including **ShopBase**) in the same category as tools like Mitchell1, ShopKey, and ShopMonkey, so data and workflows can live where shops already work. Learn more at [openlaborproject.com](https://openlaborproject.com/). *This repo is independent from Open Labor Project’s datasets; we cite Xerostatic and OLP as **inspiration** and ecosystem kinship—see [ATTRIBUTION.md](./ATTRIBUTION.md).*
 
-2. **Gam3rgoon** — builds **custom, multi-platform applications** (Windows, macOS, Android, iOS) with add-on solutions tailored to business needs, including an **Android-based OBD2 scanner** (coming soon), so the library and related tooling can meet people on the devices they already use.
+2. **Gam3rGoon** — builds **custom, multi-platform applications** (Windows, macOS, Android, iOS) with add-on solutions tailored to business needs, including an **Android-based OBD2 scanner** (coming soon), so the library and related tooling can meet people on the devices they already use.
 
 Together, the aim is for this growing library to be **something you can build on and plug into real businesses**—not just a folder of files for developers only.
 
