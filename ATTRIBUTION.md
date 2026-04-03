@@ -16,7 +16,7 @@ The **`catalog/`** picker does not replace CHARM; it helps visitors find the rig
 
 ## Xerostatic and Open Labor Project (values, ecosystem, inspiration)
 
-**[Open Labor Project](https://openlaborproject.com/)** — created by **Xerostatic** — provides **free** labor times, torque specs, fluid specs, DTC codes, battery specs, and related shop-facing data, plus web-based shop tools such as **ShopBase**. This **Open Vehicle Database** repository is a **separate** community library; it does not ship Open Labor Project’s datasets.
+**[ShopBase](https://shopbasehq.com/)**, **[Open Labor Project](https://openlaborproject.com/)** — created by **Xerostatic** — provides **free** labor times, torque specs, fluid specs, DTC codes, battery specs, and related shop-facing data, plus web-based shop management. This **Open Vehicle Database** repository is a **separate** community library; it does not ship Open Labor Project’s datasets.
 
 We **acknowledge and thank Xerostatic** for **Open Labor Project** as **major inspiration** and as part of the same **right-to-repair** ecosystem: practical, no-paywall information for technicians and owners. When you describe this project publicly, crediting **[Open Labor Project](https://openlaborproject.com/)** alongside Operation CHARM helps people find related free resources.
 
