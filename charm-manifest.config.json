@@ -1,3 +1,6 @@
 {
-  "charmDirs": ["Acura"]
+  "charmDirs": ["Acura"],
+  "scanRepoRootForManuals": true,
+  "manualRootSkip": [],
+  "pdfScanMaxDepth": 3
 }

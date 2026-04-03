@@ -1,8 +1,14 @@
 {
   "generatedFor": "Open-Vehicle-Database catalog \u2192 CHARM manuals",
-  "pickerNote": "Make/year/model/engine are derived from CHARM folder names only (no external vehicle DB).",
+  "pickerNote": "Make/year/model/engine are derived from folder names under indexed roots (CHARM layout or flat manual folders).",
   "charmDirs": [
     "Acura"
+  ],
+  "scanRepoRootForManuals": true,
+  "pdfScanMaxDepth": 3,
+  "indexRoots": [
+    "Acura",
+    "JOHN-DEERE-Garden-Tractors-X465-X475-X485-X575-X585-TM2023-JUNE-2004-TECHNICAL-MANUAL"
   ],
   "manuals": [
     {
@@ -12,7 +18,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra L4-1590cc 1.6L DOHC FI",
       "pickerModel": "Integra",
-      "pickerEngine": "L4-1590cc 1.6L DOHC FI"
+      "pickerEngine": "L4-1590cc 1.6L DOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1986 Acura Legend V6-2494cc 2.5L SOHC FI/1986 Acura Legend V6-2494cc 2.5L SOHC FI/index.html",
@@ -21,7 +28,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend V6-2494cc 2.5L SOHC FI",
       "pickerModel": "Legend",
-      "pickerEngine": "V6-2494cc 2.5L SOHC FI"
+      "pickerEngine": "V6-2494cc 2.5L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1987 Acura Integra L4-1590cc 1.6L DOHC FI/index.html",
@@ -30,7 +38,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra L4-1590cc 1.6L DOHC FI",
       "pickerModel": "Integra",
-      "pickerEngine": "L4-1590cc 1.6L DOHC FI"
+      "pickerEngine": "L4-1590cc 1.6L DOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1987 Acura Legend Coupe V6-2494cc 2.5L SOHC FI/index.html",
@@ -39,7 +48,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Coupe V6-2494cc 2.5L SOHC FI",
       "pickerModel": "Legend Coupe",
-      "pickerEngine": "V6-2494cc 2.5L SOHC FI"
+      "pickerEngine": "V6-2494cc 2.5L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1987 Acura Legend Sedan V6-2494cc 2.5L SOHC FI/index.html",
@@ -48,7 +58,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Sedan V6-2494cc 2.5L SOHC FI",
       "pickerModel": "Legend Sedan",
-      "pickerEngine": "V6-2494cc 2.5L SOHC FI"
+      "pickerEngine": "V6-2494cc 2.5L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1988 Acura Integra L4-1590cc 1.6L DOHC FI/index.html",
@@ -57,7 +68,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra L4-1590cc 1.6L DOHC FI",
       "pickerModel": "Integra",
-      "pickerEngine": "L4-1590cc 1.6L DOHC FI"
+      "pickerEngine": "L4-1590cc 1.6L DOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1988 Acura Legend Coupe V6-2675cc 2.7L SOHC FI/index.html",
@@ -66,7 +78,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Coupe V6-2675cc 2.7L SOHC FI",
       "pickerModel": "Legend Coupe",
-      "pickerEngine": "V6-2675cc 2.7L SOHC FI"
+      "pickerEngine": "V6-2675cc 2.7L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1988 Acura Legend Sedan V6-2675cc 2.7L SOHC FI/index.html",
@@ -75,7 +88,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Sedan V6-2675cc 2.7L SOHC FI",
       "pickerModel": "Legend Sedan",
-      "pickerEngine": "V6-2675cc 2.7L SOHC FI"
+      "pickerEngine": "V6-2675cc 2.7L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1989 Acura Integra L4-1590cc 1.6L DOHC FI/index.html",
@@ -84,7 +98,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra L4-1590cc 1.6L DOHC FI",
       "pickerModel": "Integra",
-      "pickerEngine": "L4-1590cc 1.6L DOHC FI"
+      "pickerEngine": "L4-1590cc 1.6L DOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1989 Acura Legend Coupe V6-2675cc 2.7L SOHC FI/index.html",
@@ -93,7 +108,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Coupe V6-2675cc 2.7L SOHC FI",
       "pickerModel": "Legend Coupe",
-      "pickerEngine": "V6-2675cc 2.7L SOHC FI"
+      "pickerEngine": "V6-2675cc 2.7L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1989 Acura Legend Sedan V6-2675cc 2.7L SOHC FI/index.html",
@@ -102,7 +118,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Sedan V6-2675cc 2.7L SOHC FI",
       "pickerModel": "Legend Sedan",
-      "pickerEngine": "V6-2675cc 2.7L SOHC FI"
+      "pickerEngine": "V6-2675cc 2.7L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1990 Acura Integra L4-1834cc 1.8L DOHC FI/index.html",
@@ -111,7 +128,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra L4-1834cc 1.8L DOHC FI",
       "pickerModel": "Integra",
-      "pickerEngine": "L4-1834cc 1.8L DOHC FI"
+      "pickerEngine": "L4-1834cc 1.8L DOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1990 Acura Legend Coupe V6-2675cc 2.7L SOHC FI/index.html",
@@ -120,7 +138,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Coupe V6-2675cc 2.7L SOHC FI",
       "pickerModel": "Legend Coupe",
-      "pickerEngine": "V6-2675cc 2.7L SOHC FI"
+      "pickerEngine": "V6-2675cc 2.7L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1990 Acura Legend Sedan V6-2675cc 2.7L SOHC FI/index.html",
@@ -129,7 +148,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Sedan V6-2675cc 2.7L SOHC FI",
       "pickerModel": "Legend Sedan",
-      "pickerEngine": "V6-2675cc 2.7L SOHC FI"
+      "pickerEngine": "V6-2675cc 2.7L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1991 Acura Integra L4-1834cc 1.8L DOHC FI/index.html",
@@ -138,7 +158,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra L4-1834cc 1.8L DOHC FI",
       "pickerModel": "Integra",
-      "pickerEngine": "L4-1834cc 1.8L DOHC FI"
+      "pickerEngine": "L4-1834cc 1.8L DOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1991 Acura Legend Coupe V6-3206cc 3.2L SOHC FI/index.html",
@@ -147,7 +168,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Coupe V6-3206cc 3.2L SOHC FI",
       "pickerModel": "Legend Coupe",
-      "pickerEngine": "V6-3206cc 3.2L SOHC FI"
+      "pickerEngine": "V6-3206cc 3.2L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1991 Acura Legend Sedan V6-3206cc 3.2L SOHC FI/index.html",
@@ -156,7 +178,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Sedan V6-3206cc 3.2L SOHC FI",
       "pickerModel": "Legend Sedan",
-      "pickerEngine": "V6-3206cc 3.2L SOHC FI"
+      "pickerEngine": "V6-3206cc 3.2L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1991 Acura NSX V6-3.0L DOHC/index.html",
@@ -165,7 +188,8 @@
       "make": "ACURA",
       "restAfterMake": "NSX V6-3.0L DOHC",
       "pickerModel": "NSX",
-      "pickerEngine": "V6-3.0L DOHC"
+      "pickerEngine": "V6-3.0L DOHC",
+      "kind": "html"
     },
     {
       "href": "../Acura/1992 Acura Integra L4-1678cc 1.7L DOHC (VTEC) FI/index.html",
@@ -174,7 +198,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra L4-1678cc 1.7L DOHC (VTEC) FI",
       "pickerModel": "Integra",
-      "pickerEngine": "L4-1678cc 1.7L DOHC (VTEC) FI"
+      "pickerEngine": "L4-1678cc 1.7L DOHC (VTEC) FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1992 Acura Integra L4-1834cc 1.8L DOHC FI/index.html",
@@ -183,7 +208,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra L4-1834cc 1.8L DOHC FI",
       "pickerModel": "Integra",
-      "pickerEngine": "L4-1834cc 1.8L DOHC FI"
+      "pickerEngine": "L4-1834cc 1.8L DOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1992 Acura Legend Coupe V6-3206cc 3.2L SOHC FI/index.html",
@@ -192,7 +218,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Coupe V6-3206cc 3.2L SOHC FI",
       "pickerModel": "Legend Coupe",
-      "pickerEngine": "V6-3206cc 3.2L SOHC FI"
+      "pickerEngine": "V6-3206cc 3.2L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1992 Acura Legend Sedan V6-3206cc 3.2L SOHC FI/index.html",
@@ -201,7 +228,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Sedan V6-3206cc 3.2L SOHC FI",
       "pickerModel": "Legend Sedan",
-      "pickerEngine": "V6-3206cc 3.2L SOHC FI"
+      "pickerEngine": "V6-3206cc 3.2L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1992 Acura NSX V6-3.0L DOHC/index.html",
@@ -210,7 +238,8 @@
       "make": "ACURA",
       "restAfterMake": "NSX V6-3.0L DOHC",
       "pickerModel": "NSX",
-      "pickerEngine": "V6-3.0L DOHC"
+      "pickerEngine": "V6-3.0L DOHC",
+      "kind": "html"
     },
     {
       "href": "../Acura/1992 Acura Vigor L5-2451cc 2.5L SOHC G25A4 FI/index.html",
@@ -219,7 +248,8 @@
       "make": "ACURA",
       "restAfterMake": "Vigor L5-2451cc 2.5L SOHC G25A4 FI",
       "pickerModel": "Vigor",
-      "pickerEngine": "L5-2451cc 2.5L SOHC G25A4 FI"
+      "pickerEngine": "L5-2451cc 2.5L SOHC G25A4 FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1993 Acura Integra L4-1678cc 1.7L DOHC (VTEC) FI/index.html",
@@ -228,7 +258,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra L4-1678cc 1.7L DOHC (VTEC) FI",
       "pickerModel": "Integra",
-      "pickerEngine": "L4-1678cc 1.7L DOHC (VTEC) FI"
+      "pickerEngine": "L4-1678cc 1.7L DOHC (VTEC) FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1993 Acura Integra L4-1834cc 1.8L DOHC FI/index.html",
@@ -237,7 +268,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra L4-1834cc 1.8L DOHC FI",
       "pickerModel": "Integra",
-      "pickerEngine": "L4-1834cc 1.8L DOHC FI"
+      "pickerEngine": "L4-1834cc 1.8L DOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1993 Acura Legend Coupe V6-3206cc 3.2L SOHC FI/index.html",
@@ -246,7 +278,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Coupe V6-3206cc 3.2L SOHC FI",
       "pickerModel": "Legend Coupe",
-      "pickerEngine": "V6-3206cc 3.2L SOHC FI"
+      "pickerEngine": "V6-3206cc 3.2L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1993 Acura Legend Sedan V6-3206cc 3.2L SOHC FI/index.html",
@@ -255,7 +288,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Sedan V6-3206cc 3.2L SOHC FI",
       "pickerModel": "Legend Sedan",
-      "pickerEngine": "V6-3206cc 3.2L SOHC FI"
+      "pickerEngine": "V6-3206cc 3.2L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1993 Acura NSX V6-3.0L DOHC/index.html",
@@ -264,7 +298,8 @@
       "make": "ACURA",
       "restAfterMake": "NSX V6-3.0L DOHC",
       "pickerModel": "NSX",
-      "pickerEngine": "V6-3.0L DOHC"
+      "pickerEngine": "V6-3.0L DOHC",
+      "kind": "html"
     },
     {
       "href": "../Acura/1993 Acura Vigor L5-2451cc 2.5L SOHC G25A4 FI/index.html",
@@ -273,7 +308,8 @@
       "make": "ACURA",
       "restAfterMake": "Vigor L5-2451cc 2.5L SOHC G25A4 FI",
       "pickerModel": "Vigor",
-      "pickerEngine": "L5-2451cc 2.5L SOHC G25A4 FI"
+      "pickerEngine": "L5-2451cc 2.5L SOHC G25A4 FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1994 Acura Integra (GS-R) L4-1797cc 1.8L DOHC (VTEC)/index.html",
@@ -282,7 +318,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra (GS-R) L4-1797cc 1.8L DOHC (VTEC)",
       "pickerModel": "Integra (GS-R)",
-      "pickerEngine": "L4-1797cc 1.8L DOHC (VTEC)"
+      "pickerEngine": "L4-1797cc 1.8L DOHC (VTEC)",
+      "kind": "html"
     },
     {
       "href": "../Acura/1994 Acura Integra (RS, LS) L4-1834cc 1.8L DOHC FI/index.html",
@@ -291,7 +328,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra (RS, LS) L4-1834cc 1.8L DOHC FI",
       "pickerModel": "Integra (RS, LS)",
-      "pickerEngine": "L4-1834cc 1.8L DOHC FI"
+      "pickerEngine": "L4-1834cc 1.8L DOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1994 Acura Legend Coupe V6-3206cc 3.2L SOHC FI/index.html",
@@ -300,7 +338,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Coupe V6-3206cc 3.2L SOHC FI",
       "pickerModel": "Legend Coupe",
-      "pickerEngine": "V6-3206cc 3.2L SOHC FI"
+      "pickerEngine": "V6-3206cc 3.2L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1994 Acura Legend Sedan V6-3206cc 3.2L SOHC FI/index.html",
@@ -309,7 +348,8 @@
       "make": "ACURA",
       "restAfterMake": "Legend Sedan V6-3206cc 3.2L SOHC FI",
       "pickerModel": "Legend Sedan",
-      "pickerEngine": "V6-3206cc 3.2L SOHC FI"
+      "pickerEngine": "V6-3206cc 3.2L SOHC FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1994 Acura NSX V6-3.0L DOHC/index.html",
@@ -318,7 +358,8 @@
       "make": "ACURA",
       "restAfterMake": "NSX V6-3.0L DOHC",
       "pickerModel": "NSX",
-      "pickerEngine": "V6-3.0L DOHC"
+      "pickerEngine": "V6-3.0L DOHC",
+      "kind": "html"
     },
     {
       "href": "../Acura/1994 Acura Vigor L5-2451cc 2.5L SOHC G25A4 FI/index.html",
@@ -327,7 +368,8 @@
       "make": "ACURA",
       "restAfterMake": "Vigor L5-2451cc 2.5L SOHC G25A4 FI",
       "pickerModel": "Vigor",
-      "pickerEngine": "L5-2451cc 2.5L SOHC G25A4 FI"
+      "pickerEngine": "L5-2451cc 2.5L SOHC G25A4 FI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1995 Acura Integra (GS-R) L4-1797cc 1.8L DOHC (VTEC)/index.html",
@@ -336,7 +378,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra (GS-R) L4-1797cc 1.8L DOHC (VTEC)",
       "pickerModel": "Integra (GS-R)",
-      "pickerEngine": "L4-1797cc 1.8L DOHC (VTEC)"
+      "pickerEngine": "L4-1797cc 1.8L DOHC (VTEC)",
+      "kind": "html"
     },
     {
       "href": "../Acura/1995 Acura Integra (RS, LS) L4-1834cc 1.8L DOHC PFI/index.html",
@@ -345,7 +388,8 @@
       "make": "ACURA",
       "restAfterMake": "Integra (RS, LS) L4-1834cc 1.8L DOHC PFI",
       "pickerModel": "Integra (RS, LS)",
-      "pickerEngine": "L4-1834cc 1.8L DOHC PFI"
+      "pickerEngine": "L4-1834cc 1.8L DOHC PFI",
+      "kind": "html"
     },
     {
       "href": "../Acura/1995 Acura Legend Coupe V6-3206cc 3.2L SOHC FI/index.html",
@@ -354,7 +398,33 @@
       "make": "ACURA",
       "restAfterMake": "Legend Coupe V6-3206cc 3.2L SOHC FI",
       "pickerModel": "Legend Coupe",
-      "pickerEngine": "V6-3206cc 3.2L SOHC FI"
+      "pickerEngine": "V6-3206cc 3.2L SOHC FI",
+      "kind": "html"
+    },
+    {
+      "href": "../JOHN-DEERE-Garden-Tractors-X465-X475-X485-X575-X585-TM2023-JUNE-2004-TECHNICAL-MANUAL/TM2023_Garden_Tractor_X465_X475_X485_X575_X585.pdf",
+      "title": "X465_X475_X485_X575_X585 (PDF)",
+      "make": "JOHN-DEERE",
+      "yearFrom": 2002,
+      "yearTo": 2006,
+      "restAfterMake": "Garden Tractors",
+      "pickerModel": "X465_X475_X485_X575_X585",
+      "pickerEngine": "",
+      "kind": "pdf"
+    },
+    {
+      "href": "../JOHN-DEERE-Garden-Tractors-X465-X475-X485-X575-X585-TM2023-JUNE-2004-TECHNICAL-MANUAL/John_Deere_Electrical_Technical Manual.pdf",
+      "title": "X465_X475_X485_X575_X585 - Electrical (PDF)",
+      "make": "JOHN-DEERE",
+      "yearFrom": 2002,
+      "yearTo": 2006,
+      "restAfterMake": "Garden Tractors",
+      "pickerModel": "X465_X475_X485_X575_X585 - Electrical",
+      "pickerEngine": "",
+      "kind": "pdf"
     }
-  ]
+  ],
+  "makeDisplayNames": {
+    "JOHN-DEERE": "John-Deere"
+  }
 }

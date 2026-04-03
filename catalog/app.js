@@ -14,6 +14,26 @@ function loadCharmManifest() {
   return loadJson(new URL("charm-manual-index.json", import.meta.url).href);
 }
 
+function yearsFromManualRow(row) {
+  if (typeof row.year === "number") return [row.year];
+  const a = row.yearFrom;
+  const b = row.yearTo;
+  if (typeof a === "number" && typeof b === "number" && a <= b) {
+    const out = [];
+    for (let y = a; y <= b; y++) out.push(y);
+    return out;
+  }
+  return [];
+}
+
+function manualYearMatches(row, yi) {
+  if (typeof row.year === "number") return row.year === yi;
+  if (typeof row.yearFrom === "number" && typeof row.yearTo === "number") {
+    return yi >= row.yearFrom && yi <= row.yearTo;
+  }
+  return false;
+}
+
 function loadCharmCoverage() {
   return loadJson(new URL("charm-coverage.json", import.meta.url).href);
 }
@@ -126,8 +146,11 @@ async function main() {
     byMakeYear: {},
   };
 
+  let makeDisplayNames = {};
   try {
-    manuals = (await loadCharmManifest()).manuals || [];
+    const manifestData = await loadCharmManifest();
+    manuals = manifestData.manuals || [];
+    makeDisplayNames = manifestData.makeDisplayNames || {};
   } catch (e) {
     status(
       `Could not load charm-manual-index.json (${e.message}). Run scripts/build_charm_manifest.py and serve the repo root over HTTP.`
@@ -155,7 +178,9 @@ async function main() {
   function mergeYearsForMake(makeKey) {
     const fromCov = yearsFromCoverage(makeKey);
     const fromMan = uniqSortedYears(
-      manuals.filter((row) => row.make === makeKey).map((row) => row.year)
+      manuals
+        .filter((row) => row.make === makeKey)
+        .flatMap((row) => yearsFromManualRow(row))
     );
     return uniqSortedYears([...fromCov, ...fromMan]);
   }
@@ -163,6 +188,8 @@ async function main() {
   function makeLabel(makeKey) {
     const row = coverageByKey.get(makeKey);
     if (row) return row.charmName;
+    const custom = makeDisplayNames[makeKey];
+    if (custom) return custom;
     return makeKey.charAt(0) + makeKey.slice(1).toLowerCase();
   }
 
@@ -172,7 +199,9 @@ async function main() {
 
   function filterByMakeYear(m, y) {
     const yi = parseInt(y, 10);
-    return manuals.filter((row) => row.make === m && row.year === yi);
+    return manuals.filter(
+      (row) => row.make === m && manualYearMatches(row, yi)
+    );
   }
 
   function filterByMakeYearModel(m, y, mod) {
@@ -180,7 +209,7 @@ async function main() {
     return manuals.filter(
       (row) =>
         row.make === m &&
-        row.year === yi &&
+        manualYearMatches(row, yi) &&
         (row.pickerModel || "") === mod
     );
   }
