@@ -47,6 +47,19 @@ Together, the aim is for this growing library to be **something you can build on
 
 The **`catalog/`** site is a **Make → Year → Model → Engine** picker.
 
+**What you see at `/catalog/`** (e.g. [http://127.0.0.1:8080/catalog/](http://127.0.0.1:8080/catalog/) when serving the repo root):
+
+| Area | Contents |
+|------|-----------|
+| **Title** | *Pick a vehicle* |
+| **Filters** | **Make**, **Year**, **Model**, and **Engine** (labeled *from folder title* for manifest-derived rows). |
+| **CHARM menu section** | Dropdown: *Vehicle menu (root)*, *Repair and Diagnosis*, or *Parts and Labor*. **Disabled** until you choose a **remote** charm.li vehicle (no local export for that make/year); it only adjusts the URL opened by the manual link. |
+| **Hint** | Short line: open Operation CHARM in a **new tab** from the manual link. |
+| **Manual** | Status text (e.g. *Select a make.*) and, after you narrow choices, one or more links to local `index.html` / PDF or charm.li. |
+| **Footer** | *Manuals:* link to [charm.li](https://charm.li/) and **[ATTRIBUTION.md](./ATTRIBUTION.md)**. |
+
+There is **no** separate setup blurb or long intro on the page itself—details stay in this README.
+
 - **Local manuals:** when a manual exists under a **`charmDirs`** folder (e.g. **`Acura/`**) or another **top-level folder** the indexer picked up, the picker links to your offline **`index.html`** or **`.pdf`** (one picker row per PDF). **CHARM-style** layouts use subfolders named like **`1994 Acura Integra …`**. **Flat** bundles may use **`index.html`**, **`.pdf`** files, or both; PDFs in the same directory as an **`index.html`** are not double-listed (HTML wins for that folder). Some bundles use **`yearFrom`** / **`yearTo`** instead of a single **`year`** (e.g. John Deere garden tractor PDFs); the picker shows every year in that range. Optional **`makeDisplayNames`** in **`charm-manual-index.json`** overrides the Make dropdown label (e.g. **John-Deere** instead of **John-deere**).
 - **No local export, cached listings:** **`catalog/charm-vehicle-cache.json`** is built by scraping public **`charm.li/{Make}/{year}/`** pages (see script below). The picker fills **model** and **engine** from that file and opens each vehicle’s **directory URL** on [Operation CHARM](https://charm.li/) (CHARM’s UI; you continue to the manual there). On some year pages, CHARM nests links under plain-text group titles (for example *Avalanche 1500 2WD* or *Cobalt*); the anchor text may show only the engine line. **`build_charm_vehicle_cache.py`** takes each vehicle’s full line from the decoded **`href`** path after `/Make/year/`, so grouped entries still get correct **model** and **engine** in the picker.
 - **No cache row for that make/year:** the status shows **Index not yet added**, with an optional link to the **year index** on charm.li so you can still open the manual in the browser.
@@ -102,13 +115,15 @@ To add more **local** manuals, either add a folder name to **`charmDirs`**, or p
 2. Start a local web server, for example:
 
    ```bash
-   python -m http.server 8080
+   python -m http.server 8080 -b 127.0.0.1
    ```
 
-3. In your browser go to: **http://localhost:8080/catalog/**
-4. **Make selections** in the picker (**Make → Year → Model → Engine**). For **remote** CHARM rows, optionally set **CHARM menu section**, then open the manual link (new tab).
+   (`-b 127.0.0.1` avoids some IPv6/localhost quirks on Windows.)
 
-**Reference** — picker UI:
+3. Open **`http://127.0.0.1:8080/catalog/`** (or `http://localhost:8080/catalog/`).
+4. Use **Make → Year → Model → Engine**. For **remote** CHARM rows, optionally set **CHARM menu section**, then click a **Manual** link (opens in a new tab).
+
+**Reference** — current picker at `/catalog/` (dark theme example):
 
 ![Vehicle picker — Pick a vehicle](catalog/vehicle-picker-reference.png)
 
