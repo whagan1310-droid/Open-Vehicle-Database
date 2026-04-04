@@ -45,9 +45,15 @@ Together, the aim is for this growing library to be **something you can build on
 
 ## Vehicle catalog (CHARM picker) — Built by Gam3rGoon
 
-The **`catalog/`** site is a **Make → Year → Model → Engine** picker.
+The **`catalog/`** site is a **Make → Year → Model → Engine** picker. GitHub only shows this **documentation** in the README—the picker itself is **not** hosted at a github.io URL. After you **clone** the repo and **start a local web server** (see **Quick start** at the end of this catalog section), open the picker in **your** browser at:
 
-**What you see at `/catalog/`** (e.g. [http://127.0.0.1:8080/catalog/](http://127.0.0.1:8080/catalog/) when serving the repo root):
+```
+http://127.0.0.1:8080/catalog/
+```
+
+*(GitHub’s README viewer may not turn `http://127.0.0.1/…` into a working link; copy the line above, or use `http://localhost:8080/catalog/`.)*
+
+**What you see at `/catalog/`** once the server is running:
 
 | Area | Contents |
 |------|-----------|
