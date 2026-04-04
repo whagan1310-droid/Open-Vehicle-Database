@@ -50,15 +50,17 @@ The **`catalog/`** site is a **Make → Year → Model → Engine** picker.
 - **Local manuals:** when a manual exists under a **`charmDirs`** folder (e.g. **`Acura/`**) or another **top-level folder** the indexer picked up, the picker links to your offline **`index.html`** or **`.pdf`** (one picker row per PDF). **CHARM-style** layouts use subfolders named like **`1994 Acura Integra …`**. **Flat** bundles may use **`index.html`**, **`.pdf`** files, or both; PDFs in the same directory as an **`index.html`** are not double-listed (HTML wins for that folder). Some bundles use **`yearFrom`** / **`yearTo`** instead of a single **`year`** (e.g. John Deere garden tractor PDFs); the picker shows every year in that range. Optional **`makeDisplayNames`** in **`charm-manual-index.json`** overrides the Make dropdown label (e.g. **John-Deere** instead of **John-deere**).
 - **No local export, cached listings:** **`catalog/charm-vehicle-cache.json`** is built by scraping public **`charm.li/{Make}/{year}/`** pages (see script below). The picker fills **model** and **engine** from that file and opens each vehicle’s **directory URL** on [Operation CHARM](https://charm.li/) (CHARM’s UI; you continue to the manual there). On some year pages, CHARM nests links under plain-text group titles (for example *Avalanche 1500 2WD* or *Cobalt*); the anchor text may show only the engine line. **`build_charm_vehicle_cache.py`** takes each vehicle’s full line from the decoded **`href`** path after `/Make/year/`, so grouped entries still get correct **model** and **engine** in the picker.
 - **No cache row for that make/year:** the status shows **Index not yet added**, with an optional link to the **year index** on charm.li so you can still open the manual in the browser.
-- **Deeper scan (remote CHARM only):** when there is **no** local export for the vehicle you picked, the picker enables **CHARM menu section**, **Search on that CHARM page**, and the **Load CHARM table of contents** panel. Build **`charm-section-toc-cache.json`** (setup step 4) for offline search suggestions; see **Restart, merge, and Charm updates** to resume long builds or refresh after CHARM changes.
+- **Remote CHARM only:** when there is **no** local export for that make/year, the picker enables **CHARM menu section** (*Vehicle menu*, *Repair and Diagnosis*, or *Parts and Labor*) so the manual link opens that branch on [charm.li](https://charm.li/) in a new tab. Search and navigation inside the manual happen on charm.li in the browser.
+- **“Deep scan” / in-catalog CHARM search (removed):** Earlier experiments (TOC JSON cache, datalist suggestions, Google-scoped search from the catalog, topic chips) did **not** deliver a reliable in-page search of charm.li—static hosting and browser security (no cross-origin reads of charm.li) make that impractical without a backend. The catalog UI was simplified to **pick a vehicle → open the manual on charm.li**. Optional script output below is only for **your own data/analysis**, not the picker.
 
 **Setup**
 
 1. **Coverage (make/year ranges):** run `python scripts/sync_charm_coverage_from_charm_li.py` (or `python scripts/generate_charm_coverage.py`) to refresh **`catalog/charm-coverage.json`** from live [charm.li](https://charm.li/) — avoids errors in a hand-written list.
 2. **Local index:** `python scripts/build_charm_manifest.py` → **`catalog/charm-manual-index.json`**. Folders listed under **`charmDirs`** in **`charm-manifest.config.json`** are always scanned. Set **`scanRepoRootForManuals`** to **`true`** to also scan **other top-level directories** that contain an **`index.html`** (any depth) or **`.pdf`** manuals within **`pdfScanMaxDepth`** levels under that folder (default **3**; set **`0`** to disable PDF indexing). Skips **`catalog/`**, **`scripts/`**, **`.git`**, etc. Use **`manualRootSkip`** to exclude specific folder names from that scan. CLI: **`--scan-repo`** / **`--no-scan-repo`**, **`--pdf-depth N`**. The generated JSON lists every root that was indexed in **`indexRoots`**.
 3. **Vehicle cache (model/engine → remote manual URLs):** `python scripts/build_charm_vehicle_cache.py` → **`catalog/charm-vehicle-cache.json`**. Default **`--scope manifest`** only fetches `(makeKey, year)` pairs that appear in the local manifest (typically matches your **`charmDirs`** exports, e.g. Acura only). For a **full** cache of every make/year on CHARM, use **`--scope coverage`** (many HTTP requests and a large JSON). Example full rebuild: `python scripts/build_charm_vehicle_cache.py --fresh --scope coverage --sleep 0.2` (add **`--refetch`** if you are merging into an existing file and want to force re-download of everything in scope). **Resume / merge:** by default the script **loads** an existing cache and **skips** pairs already present; it **rewrites the JSON after each fetch** (use **`--checkpoint-every N`** to batch writes). **Ctrl+C** saves progress; re-run the **same command** to continue. **`--fresh`** (or **`--no-merge`**) starts empty; **`--refetch`** ignores the skip and re-downloads everything in scope.
-4. **CHARM section TOC (deeper picker / search):** `python scripts/build_charm_section_toc_cache.py` → **`catalog/charm-section-toc-cache.json`**. This file lists **Repair and Diagnosis** and **Parts and Labor** table-of-contents titles per vehicle path (same idea as the in-catalog bookmarklet). The picker loads it so the **“Search on that CHARM page”** field can suggest real section names without calling charm.li from the browser (CORS). **How to use the deeper controls in the picker** (only when you picked a **remote** manual—no local export for that make/year): choose **CHARM menu section** (*Vehicle menu (root)*, *Repair and Diagnosis*, or *Parts and Labor*); the manual link opens that branch on charm.li. Type a phrase in **Search on that CHARM page** and use **Google · this folder** beside the link to run a Google search scoped to the same path on charm.li. If you do **not** ship **`charm-section-toc-cache.json`**, expand the **Load CHARM table of contents** panel: copy the bookmarklet, use it on an expanded charm.li page, or paste JSON / one title per line and **Save for this manual & CHARM section** (stored in the browser’s **sessionStorage** for that session).
-5. **Serve** the repo root (`python -m http.server 8080`) and open **`/catalog/`**.
+4. **Serve** the repo root (`python -m http.server 8080`) and open **`/catalog/`**.
+
+**Optional — Repair/Parts TOC scrape (not used by the picker):** `python scripts/build_charm_section_toc_cache.py` can still build **`catalog/charm-section-toc-cache.json`** (titles per vehicle path from public charm.li index pages) for **offline analysis or other tools**. Output paths are **gitignored**; the file is often very large. **`scripts/fetch_charm_section_toc.py`** fetches a single URL for manual/CLI use. Neither is required to run the catalog.
 
 **How you refresh coverage later**
 
@@ -72,22 +74,11 @@ That keeps the picker in sync with CHARM even if they add years or makes later, 
 
 ### Restart, merge, and Charm updates
 
-When CHARM’s site or your exports change, refresh the JSON the picker reads. **You usually do not delete old files:** both builder scripts **merge** into an existing file by default and **skip** work that is already done.
+When CHARM’s site or your exports change, refresh the JSON the picker reads. **`build_charm_vehicle_cache.py`** **merges** by default: re-run the **same** command **without** `--fresh` to skip make/year pairs already in **`charm-vehicle-cache.json`**. It **rewrites after each fetch** (or use **`--checkpoint-every N`**). **Ctrl+C** is safe. Use **`--fresh`** / **`--no-merge`** for an empty start; **`--refetch`** forces re-download for everything in scope.
 
-| Data file | Builder | Restart / resume | Force full redo | Notes |
-|-----------|---------|------------------|-----------------|-------|
-| **`charm-vehicle-cache.json`** | `scripts/build_charm_vehicle_cache.py` | Re-run the **same** command **without** `--fresh`. Skips make/year pairs already in the file. | `--fresh` or `--no-merge` for an empty start; **`--refetch`** to re-download everything in scope | Writes after each fetch (or batched with **`--checkpoint-every N`**). **Ctrl+C** is safe; run again to continue. |
-| **`charm-section-toc-cache.json`** | `scripts/build_charm_section_toc_cache.py` | Re-run **without** `--fresh`. Skips vehicle paths that already have **both** `repair` and `parts` title lists non-empty. | `--fresh` drops merged data; **`--refetch`** re-fetches paths even if present | One vehicle path = two HTTP pages (Repair + Parts). Uses a keep-alive HTTPS session. Optional **`--sleep`** (default `0.2`), **`--max-rps`** to cap requests/sec (**`max(sleep, 1/rps)`** after each response), **`--max-429-retries`** for HTTP 429 backoff. **`--offset N`** skips the first *N* sorted paths only if you cannot load a **valid** JSON file (prefer fixing/restoring the file so merge works). |
+**After CHARM adds vehicles or years:** refresh **`charm-coverage.json`**, then rebuild **`charm-vehicle-cache.json`** for the new scope.
 
-**Typical “pick up where I left off”:** keep **`catalog/charm-section-toc-cache.json`** (or vehicle cache) on disk, run for example:
-
-```bash
-python scripts/build_charm_section_toc_cache.py --sleep 0.15
-```
-
-Do **not** pass **`--fresh`** unless you intend to rebuild **`byPath`** from scratch. If merge fails with a JSON error, restore the file from git or a backup; a corrupted file cannot be merged until it is valid JSON again.
-
-**After CHARM adds vehicles or years:** refresh **`charm-coverage.json`** (see above), then rebuild **`charm-vehicle-cache.json`** for the new scope; then extend **`charm-section-toc-cache.json`** with the same merge/resume command so new paths get Repair/Parts titles.
+If you run **`build_charm_section_toc_cache.py`** locally, it also merge/resumes the same way (see **`--help`**); that output is optional and not consumed by the catalog.
 
 To add more **local** manuals, either add a folder name to **`charmDirs`**, or place the folder at the **repo root** and enable **`scanRepoRootForManuals`**, then rebuild the manifest.
 
@@ -97,10 +88,10 @@ To add more **local** manuals, either add a folder name to **`charmDirs`**, or p
 
 | Phase | Goal |
 |-------|------|
-| **Now** | Picker + coverage JSON + **`charm-vehicle-cache.json`** + optional **`charm-section-toc-cache.json`** for remote **charm.li** URLs, deeper section links, and search suggestions. |
+| **Now** | Picker + coverage JSON + **`charm-vehicle-cache.json`** for remote **charm.li** links; minimal catalog UI (no in-page CHARM “deep scan”). |
 | **Next** | Optional **CI on a schedule** to regenerate `charm-vehicle-cache.json` (respect CHARM’s terms and rate limits). |
 | **Later** | Small **backend proxy** (same-origin API) if you need live CHARM HTML in-app without committing huge caches. |
-| **Caution** | Browsers cannot read charm.li from `fetch()` on a static catalog (CORS); committed JSON or a server is required for deep menus. |
+| **Caution** | A static catalog cannot embed or search charm.li content in-page; users open charm.li in the browser. |
 | **Multi-word makes** | Local `index.html` paths use the first token after the year as `make` today (e.g. `Mercedes`). CHARM URLs use full names (e.g. `Mercedes Benz`). Until the manifest script learns multi-token makes, **charm.li** links still work; **local** rows may not merge for those makes without a small parser tweak. |
 
 ### How to test picker — By Gam3rGoon
@@ -115,7 +106,7 @@ To add more **local** manuals, either add a folder name to **`charmDirs`**, or p
    ```
 
 3. In your browser go to: **http://localhost:8080/catalog/**
-4. **Make selections** in the picker (**Make → Year → Model → Engine**). For **remote** CHARM rows, use **CHARM menu section** and **Search on that CHARM page** as described in setup step 4 above.
+4. **Make selections** in the picker (**Make → Year → Model → Engine**). For **remote** CHARM rows, optionally set **CHARM menu section**, then open the manual link (new tab).
 
 **Reference** — picker UI:
 

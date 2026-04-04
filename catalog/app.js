@@ -1,11 +1,7 @@
 /**
  * Vehicle picker: local CHARM exports (charm-manual-index.json) +
  * Operation CHARM coverage (charm-coverage.json) +
- * optional charm-vehicle-cache.json (scraped charm.li year pages → model/engine → vehicle URLs).
- *
- * Remote CHARM “search” cannot call charm.li from the browser (CORS). TOC titles for suggestions:
- * optional charm-section-toc-cache.json or .json.gz (scripts/build_charm_section_toc_cache.py), and/or bookmarklet /
- * fetch_charm_section_toc.py → paste → sessionStorage.
+ * charm-vehicle-cache.json (charm.li year pages → model/engine → vehicle URLs).
  */
 
 async function loadJson(url) {
@@ -56,38 +52,6 @@ async function loadCharmVehicleCache() {
   }
 }
 
-/** Populated in main() from charm-section-toc-cache.json (if present). */
-let charmSectionTocFileCache = { byPath: {} };
-
-async function loadCharmSectionTocFileCache() {
-  const apply = (d) => {
-    const bp = d && d.byPath;
-    charmSectionTocFileCache = {
-      byPath: bp && typeof bp === "object" ? bp : {},
-    };
-  };
-  const base = import.meta.url;
-  try {
-    apply(await loadJson(new URL("charm-section-toc-cache.json", base).href));
-    return;
-  } catch {
-    /* optional uncompressed local build */
-  }
-  try {
-    const href = new URL("charm-section-toc-cache.json.gz", base).href;
-    const res = await fetch(href, { cache: "no-store" });
-    if (!res.ok) throw new Error(String(res.status));
-    const buf = await res.arrayBuffer();
-    const ds = new DecompressionStream("gzip");
-    const text = await new Response(
-      new Blob([buf]).stream().pipeThrough(ds)
-    ).text();
-    apply(JSON.parse(text));
-  } catch {
-    charmSectionTocFileCache = { byPath: {} };
-  }
-}
-
 function uniqSortedStrings(arr) {
   return [...new Set(arr.filter(Boolean))].sort((a, b) =>
     a.localeCompare(b, undefined, { sensitivity: "base", numeric: true })
@@ -117,46 +81,7 @@ function populateSelect(el, values, placeholder, valueToLabel) {
 const ENGINE_EMPTY = "__none__";
 
 /**
- * Manual topic chips (single scroll row).
- * charmSection: which charm.li submenu fits that topic (see CHARM_SECTION_SUFFIX).
- */
-const TOPIC_CATEGORIES = [
-  {
-    id: "labor",
-    label: "Labor Times",
-    keywords: ["Labor", "Labor time"],
-    charmSection: "parts",
-  },
-  {
-    id: "torque",
-    label: "Torque Specs",
-    keywords: ["Torque"],
-    charmSection: "repair",
-  },
-  {
-    id: "specifications",
-    label: "Specifications",
-    keywords: ["Specifications"],
-    charmSection: "repair",
-  },
-  {
-    id: "fluid",
-    label: "Fluid Specs",
-    keywords: ["Fluid", "Fluids", "Fluid Type Specifications"],
-    charmSection: "repair",
-  },
-  {
-    id: "dtc",
-    label: "DTC Codes",
-    keywords: ["DTC", "ALL Diagnostic Trouble Codes (DTC)"],
-    charmSection: "repair",
-  },
-];
-
-/**
  * Appended after the vehicle directory URL (same as Operation CHARM directory names).
- * e.g. …/Chevrolet/2009/Silverado%201500%204WD%20V8-6.0L/Repair%20and%20Diagnosis/
- * @see https://charm.li/…/Repair%20and%20Diagnosis/ and …/Parts%20and%20Labor/
  */
 const CHARM_SECTION_SUFFIX = {
   "": "",
@@ -164,205 +89,10 @@ const CHARM_SECTION_SUFFIX = {
   parts: "Parts%20and%20Labor/",
 };
 
-/**
- * vehicleRootUrl: absolute URL to vehicle root (trailing slash optional).
- * sectionKey: "" | "repair" | "parts"
- */
 function buildCharmSectionOpenUrl(vehicleRootUrl, sectionKey) {
   const base = String(vehicleRootUrl).replace(/\/?$/, "/");
   const suf = CHARM_SECTION_SUFFIX[sectionKey] ?? "";
   return base + suf;
-}
-
-/** Encode one path segment the way charm.li URLs use (%20 for spaces, etc.). */
-function encodeCharmPathSegment(seg) {
-  if (!seg) return "";
-  try {
-    return encodeURIComponent(decodeURIComponent(seg));
-  } catch {
-    return encodeURIComponent(seg);
-  }
-}
-
-/**
- * Path for site: queries — segment-encoded to match indexed charm.li URLs
- * (e.g. /Chevrolet/2009/Silverado%201500%204WD%20V8-6.0L/Repair%20and%20Diagnosis).
- */
-function charmPathForSiteOperator(charmAbsoluteUrl) {
-  let u;
-  try {
-    u = new URL(charmAbsoluteUrl);
-  } catch {
-    return null;
-  }
-  const host = u.hostname.toLowerCase();
-  if (host !== "charm.li" && host !== "www.charm.li") return null;
-  const segments = u.pathname.split("/").filter(Boolean);
-  if (!segments.length) return "/";
-  return `/${segments.map(encodeCharmPathSegment).join("/")}`;
-}
-
-/**
- * Google search limited to the exact charm.li path (vehicle or Repair / Parts folder).
- * Use when "Search on that CHARM page" has text.
- */
-function buildGoogleCharmScopedSearchUrl(charmAbsoluteUrl, userQuery) {
-  const trimmed = String(userQuery || "").trim();
-  if (!trimmed) return null;
-  const path = charmPathForSiteOperator(charmAbsoluteUrl);
-  if (path == null) return null;
-  const siteScope = `site:charm.li${path}`;
-  const q = `${siteScope} ${trimmed}`;
-  return `https://www.google.com/search?q=${encodeURIComponent(q)}`;
-}
-
-/** sessionStorage key: vehicle root path + CHARM section (repair | parts | ""). */
-function charmVehicleRootPathForStorage(vehicleRootUrl) {
-  let u;
-  try {
-    u = new URL(vehicleRootUrl);
-  } catch {
-    return "";
-  }
-  const p = u.pathname.replace(/\/+$/, "");
-  return p || "/";
-}
-
-function charmTocStorageKey(vehicleRootUrl, sectionKey) {
-  const p = charmVehicleRootPathForStorage(vehicleRootUrl);
-  return `ovd-charm-toc:${p}:${sectionKey ?? ""}`;
-}
-
-function loadCharmTocFromSession(vehicleRootUrl, sectionKey) {
-  try {
-    const raw = sessionStorage.getItem(
-      charmTocStorageKey(vehicleRootUrl, sectionKey)
-    );
-    if (!raw) return [];
-    const data = JSON.parse(raw);
-    return Array.isArray(data) ? data : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveCharmTocToSession(vehicleRootUrl, sectionKey, titles) {
-  const list = titles.filter((t) => typeof t === "string" && t.trim());
-  sessionStorage.setItem(
-    charmTocStorageKey(vehicleRootUrl, sectionKey),
-    JSON.stringify(list)
-  );
-}
-
-function getRemoteCharmBasesFromList(listEl) {
-  const bases = [];
-  if (!listEl) return bases;
-  listEl.querySelectorAll("li.manual-list-item-remote a.manual-list-main").forEach((a) => {
-    const b = a.dataset.charmBase;
-    if (b && !bases.includes(b)) bases.push(b);
-  });
-  return bases;
-}
-
-function fileCharmTocTitlesForVehicle(vehicleRootUrl, sectionKey) {
-  const key = charmVehicleRootPathForStorage(vehicleRootUrl);
-  if (!key) return [];
-  const row = charmSectionTocFileCache.byPath[key];
-  if (!row || typeof row !== "object") return [];
-  if (sectionKey === "repair") {
-    return Array.isArray(row.repair) ? row.repair : [];
-  }
-  if (sectionKey === "parts") {
-    return Array.isArray(row.parts) ? row.parts : [];
-  }
-  return [];
-}
-
-function loadMergedCharmTocTitles(listEl, sectionKey) {
-  const bases = getRemoteCharmBasesFromList(listEl);
-  const set = new Set();
-  for (const base of bases) {
-    for (const t of loadCharmTocFromSession(base, sectionKey)) {
-      const s = String(t).trim();
-      if (s) set.add(s);
-    }
-    for (const t of fileCharmTocTitlesForVehicle(base, sectionKey)) {
-      const s = String(t).trim();
-      if (s) set.add(s);
-    }
-  }
-  return [...set].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
-}
-
-const CHARM_TOC_DATALIST_MAX = 3500;
-
-function refreshCharmSearchDatalist(listEl, sectionKey, datalistEl) {
-  if (!datalistEl) return;
-  datalistEl.innerHTML = "";
-  const titles = loadMergedCharmTocTitles(listEl, sectionKey);
-  const slice = titles.slice(0, CHARM_TOC_DATALIST_MAX);
-  for (const t of slice) {
-    const opt = document.createElement("option");
-    opt.value = t;
-    datalistEl.appendChild(opt);
-  }
-}
-
-function parseCharmTocPaste(text) {
-  const raw = String(text || "").trim();
-  if (!raw) return [];
-  if (raw.startsWith("{") || raw.startsWith("[")) {
-    try {
-      const o = JSON.parse(raw);
-      if (Array.isArray(o)) {
-        return o
-          .filter((x) => typeof x === "string")
-          .map((s) => s.trim())
-          .filter(Boolean);
-      }
-      const titles = o && o.titles;
-      if (Array.isArray(titles)) {
-        return titles
-          .filter((x) => typeof x === "string")
-          .map((s) => s.trim())
-          .filter(Boolean);
-      }
-    } catch {
-      return [];
-    }
-    return [];
-  }
-  return raw
-    .split(/\r?\n/)
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
-
-/**
- * Bookmarklet: run on charm.li after Expand All on Repair or Parts — copies JSON { sourceUrl, titles }.
- * User saves this string as a bookmark URL, then activates it on the CHARM tab.
- */
-function getCharmTocBookmarkletHref() {
-  const code =
-    '(function(){var base=location.pathname.replace(/\\/+$/,"")+"/";' +
-    'var seen=new Set();var titles=[];' +
-    'document.querySelectorAll("a[href]").forEach(function(a){try{' +
-    'var u=new URL(a.getAttribute("href"),location.href);' +
-    "if(u.origin!==location.origin)return;" +
-    'var p=u.pathname;if(p.slice(-1)!=="/")p+="/";' +
-    "if(!p.startsWith(base))return;" +
-    'var txt=(a.textContent||"").trim().replace(/\\s+/g," ");' +
-    "if(txt.length<2)return;var k=txt.toLowerCase();" +
-    "if(seen.has(k))return;seen.add(k);titles.push(txt);" +
-    "}catch(e){}});" +
-    "titles.sort(function(a,b){return a.localeCompare(b)});" +
-    "var o={sourceUrl:location.href,titles:titles};var s=JSON.stringify(o);" +
-    "if(navigator.clipboard&&navigator.clipboard.writeText){" +
-    "navigator.clipboard.writeText(s).then(function(){" +
-    'alert("CHARM: copied "+titles.length+" titles. Paste into the catalog TOC box.");' +
-    "},function(){window.prompt(\"Copy:\",s);});" +
-    '}else{window.prompt("Copy:",s);}})();';
-  return `javascript:${encodeURIComponent(code)}`;
 }
 
 function openUrlInNewTab(url) {
@@ -416,7 +146,6 @@ function remoteManualHref(vehicleCache, row) {
   let p = row.path || "";
   if (!p.startsWith("/")) p = "/" + p;
   if (!p.endsWith("/")) p += "/";
-  /* charm.li serves the manual UI from the directory URL; /index.html deep links error in-browser */
   return `${base}${p}`;
 }
 
@@ -436,19 +165,7 @@ async function main() {
   const engineSel = document.getElementById("engine");
   const statusEl = document.getElementById("status");
   const listEl = document.getElementById("manual-list");
-  const topicStripEl = document.getElementById("topic-categories-strip");
-  const topicKeywordsLine = document.getElementById("topic-keywords-line");
   const charmSectionSel = document.getElementById("charm-section");
-  const manualSearchInput = document.getElementById("manual-search-text");
-  const charmTocDatalist = document.getElementById("charm-search-datalist");
-  const charmTocPaste = document.getElementById("charm-toc-paste");
-  const charmTocApply = document.getElementById("charm-toc-apply");
-  const charmTocCopyBm = document.getElementById("charm-toc-copy-bookmarklet");
-  const charmTocCopyStatus = document.getElementById("charm-toc-copy-status");
-  const charmTocApplyStatus = document.getElementById("charm-toc-apply-status");
-  const charmTocStorageHint = document.getElementById("charm-toc-storage-hint");
-
-  let lastTopicSearchSuggestion = "";
 
   const status = (msg) => {
     statusEl.textContent = msg;
@@ -486,7 +203,6 @@ async function main() {
   }
 
   vehicleCache = await loadCharmVehicleCache();
-  await loadCharmSectionTocFileCache();
 
   function yearsFromCoverage(makeKey) {
     const row = coverageByKey.get(makeKey);
@@ -546,33 +262,14 @@ async function main() {
     return filterByMakeYear(m, y).length > 0;
   }
 
-  function refreshCharmTocUi() {
+  function syncRemoteManualHrefs() {
     const sectionKey =
       charmSectionSel && !charmSectionSel.disabled ? charmSectionSel.value : "";
-    const bases = getRemoteCharmBasesFromList(listEl);
-    const deep = isCharmDeepLinkingAvailable();
-    if (charmTocApply) {
-      charmTocApply.disabled = !(deep && bases.length > 0);
-    }
-    refreshCharmSearchDatalist(listEl, sectionKey, charmTocDatalist);
-    if (charmTocStorageHint) {
-      const n = loadMergedCharmTocTitles(listEl, sectionKey).length;
-      if (!deep) {
-        charmTocStorageHint.textContent = "";
-      } else if (!bases.length) {
-        charmTocStorageHint.textContent =
-          "Pick a remote manual below, then paste or save titles for this CHARM section.";
-      } else if (n > 0) {
-        const extra =
-          n >= CHARM_TOC_DATALIST_MAX
-            ? ` (datalist shows up to ${CHARM_TOC_DATALIST_MAX})`
-            : "";
-        charmTocStorageHint.textContent = `${n} title(s) in session for the manuals shown and the current CHARM section${extra}.`;
-      } else {
-        charmTocStorageHint.textContent =
-          "No titles saved yet. On charm.li use Expand All, run the bookmarklet, paste JSON here, then Save.";
-      }
-    }
+    listEl.querySelectorAll("li.manual-list-item-remote a.manual-list-main").forEach((a) => {
+      const base = a.dataset.charmBase;
+      if (!base) return;
+      a.href = buildCharmSectionOpenUrl(base, sectionKey);
+    });
   }
 
   function updateCharmDeepControlsState() {
@@ -580,70 +277,11 @@ async function main() {
     if (charmSectionSel) {
       charmSectionSel.disabled = !on;
     }
-    if (manualSearchInput) {
-      manualSearchInput.disabled = !on;
-    }
     const hint = document.getElementById("charm-deep-hint");
     if (hint) {
       hint.classList.toggle("hidden", !isLocalVehicleContext());
     }
-    syncRemoteGoogleSideLinksAndFallback();
-    refreshCharmTocUi();
-  }
-
-  function syncRemoteGoogleSideLinksAndFallback() {
-    const items = listEl.querySelectorAll("li.manual-list-item-remote");
-    const q =
-      manualSearchInput && !manualSearchInput.disabled
-        ? manualSearchInput.value.trim()
-        : "";
-    const sectionKey =
-      charmSectionSel && !charmSectionSel.disabled
-        ? charmSectionSel.value
-        : "";
-    items.forEach((li) => {
-      const main = li.querySelector("a.manual-list-main");
-      const gA = li.querySelector("a.manual-list-google");
-      if (!main || !gA) return;
-      const base = main.dataset.charmBase;
-      if (!base) return;
-      const charmUrl = buildCharmSectionOpenUrl(base, sectionKey);
-      main.href = charmUrl;
-      if (q && isCharmDeepLinkingAvailable()) {
-        const gu = buildGoogleCharmScopedSearchUrl(charmUrl, q);
-        if (gu) {
-          gA.href = gu;
-          gA.classList.remove("hidden");
-        } else {
-          gA.classList.add("hidden");
-        }
-      } else {
-        gA.classList.add("hidden");
-      }
-    });
-
-    const fb = document.getElementById("charm-google-fallback");
-    const fbA = document.getElementById("charm-google-fallback-link");
-    if (fb && fbA) {
-      if (items.length > 1 && q && isCharmDeepLinkingAvailable()) {
-        const firstMain = items[0]?.querySelector("a.manual-list-main");
-        const base = firstMain?.dataset.charmBase;
-        if (base) {
-          const charmUrl = buildCharmSectionOpenUrl(base, sectionKey);
-          const gu = buildGoogleCharmScopedSearchUrl(charmUrl, q);
-          if (gu) {
-            fbA.href = gu;
-            fb.classList.remove("hidden");
-          } else {
-            fb.classList.add("hidden");
-          }
-        } else {
-          fb.classList.add("hidden");
-        }
-      } else {
-        fb.classList.add("hidden");
-      }
-    }
+    syncRemoteManualHrefs();
   }
 
   function bindCharmRemoteManualOpensNewTab(anchor, baseVehicleHref) {
@@ -657,7 +295,7 @@ async function main() {
       } else {
         anchor.href = baseVehicleHref;
       }
-      syncRemoteGoogleSideLinksAndFallback();
+      syncRemoteManualHrefs();
     };
     syncHref();
     anchor.addEventListener("mouseenter", syncHref);
@@ -702,8 +340,6 @@ async function main() {
     for (const row of rows) {
       const li = document.createElement("li");
       li.className = "manual-list-item-remote";
-      const rowWrap = document.createElement("div");
-      rowWrap.className = "manual-list-row";
       const a = document.createElement("a");
       const href = remoteManualHref(vehicleCache, row);
       a.className = "manual-list-main";
@@ -712,17 +348,10 @@ async function main() {
       a.rel = "noopener noreferrer";
       bindCharmRemoteManualOpensNewTab(a, href);
       a.textContent = row.label || row.pickerModel || "Manual";
-      const gA = document.createElement("a");
-      gA.className = "manual-list-google hidden";
-      gA.target = "_blank";
-      gA.rel = "noopener noreferrer";
-      gA.textContent = "Google · this folder";
-      rowWrap.appendChild(a);
-      rowWrap.appendChild(gA);
-      li.appendChild(rowWrap);
+      li.appendChild(a);
       listEl.appendChild(li);
     }
-    syncRemoteGoogleSideLinksAndFallback();
+    syncRemoteManualHrefs();
   }
 
   function remoteModelKey(row) {
@@ -748,76 +377,6 @@ async function main() {
       a.textContent = row.title;
       li.appendChild(a);
       listEl.appendChild(li);
-    }
-  }
-
-  function syncManualTopicsUi() {
-    if (!topicStripEl) return;
-    const boxes = topicStripEl.querySelectorAll('input[type="checkbox"]:checked');
-    const selected = [...boxes]
-      .map((input) => TOPIC_CATEGORIES.find((c) => c.id === input.value))
-      .filter(Boolean);
-
-    if (!selected.length) {
-      if (topicKeywordsLine) {
-        topicKeywordsLine.classList.add("hidden");
-        topicKeywordsLine.textContent = "";
-      }
-      lastTopicSearchSuggestion = "";
-      return;
-    }
-
-    const partsKw = selected
-      .filter((c) => c.charmSection === "parts")
-      .flatMap((c) => c.keywords);
-    const repairKw = selected
-      .filter((c) => c.charmSection === "repair")
-      .flatMap((c) => c.keywords);
-    const uniq = (arr) => [...new Set(arr.map((s) => s.trim()).filter(Boolean))];
-
-    if (topicKeywordsLine) {
-      const bits = [];
-      if (partsKw.length) {
-        bits.push(
-          `Parts and Labor — try: ${uniq(partsKw).join(", ")}.`
-        );
-      }
-      if (repairKw.length) {
-        bits.push(
-          `Repair and Diagnosis — try: ${uniq(repairKw).join(", ")}.`
-        );
-      }
-      topicKeywordsLine.textContent = bits.join(" ");
-      topicKeywordsLine.classList.remove("hidden");
-    }
-
-    const allKeywords = uniq([...partsKw, ...repairKw]);
-    const suggested = allKeywords.join(", ");
-    if (manualSearchInput && suggested) {
-      const cur = manualSearchInput.value.trim();
-      if (cur === "" || cur === lastTopicSearchSuggestion) {
-        manualSearchInput.value = suggested;
-        lastTopicSearchSuggestion = suggested;
-      }
-    }
-  }
-
-  if (topicStripEl) {
-    for (const cat of TOPIC_CATEGORIES) {
-      const id = `topic-cat-${cat.id}`;
-      const label = document.createElement("label");
-      label.className = "topic-chip";
-      label.title = cat.keywords.join(", ");
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.id = id;
-      input.value = cat.id;
-      input.addEventListener("change", syncManualTopicsUi);
-      const span = document.createElement("span");
-      span.textContent = cat.label;
-      label.appendChild(input);
-      label.appendChild(span);
-      topicStripEl.appendChild(label);
     }
   }
 
@@ -993,7 +552,7 @@ async function main() {
         }
         if (subset.length === 1) {
           status(
-            "Choose CHARM section & search text above, then open the manual (new tab)."
+            "Optional: choose CHARM menu section, then open the manual (new tab)."
           );
         } else {
           status(`${subset.length} manuals match — pick one below (new tab).`);
@@ -1049,71 +608,9 @@ async function main() {
   yearSel.addEventListener("change", refreshModels);
   modelSel.addEventListener("change", refreshEngines);
   engineSel.addEventListener("change", applyEngineFilter);
-  if (manualSearchInput) {
-    manualSearchInput.addEventListener("input", syncRemoteGoogleSideLinksAndFallback);
-  }
   if (charmSectionSel) {
     charmSectionSel.addEventListener("change", () => {
-      syncRemoteGoogleSideLinksAndFallback();
-      refreshCharmTocUi();
-    });
-  }
-
-  if (charmTocCopyBm) {
-    charmTocCopyBm.addEventListener("click", async () => {
-      if (charmTocCopyStatus) charmTocCopyStatus.textContent = "";
-      const href = getCharmTocBookmarkletHref();
-      try {
-        await navigator.clipboard.writeText(href);
-        if (charmTocCopyStatus) {
-          charmTocCopyStatus.textContent =
-            "Copied bookmarklet URL. New bookmark → paste as the link address.";
-        }
-      } catch {
-        window.prompt("Copy this entire line as the bookmark URL:", href);
-      }
-    });
-  }
-
-  if (charmTocApply) {
-    charmTocApply.addEventListener("click", () => {
-      if (charmTocApplyStatus) charmTocApplyStatus.textContent = "";
-      const titles = parseCharmTocPaste(charmTocPaste?.value || "");
-      if (!titles.length) {
-        if (charmTocApplyStatus) {
-          charmTocApplyStatus.textContent =
-            "No titles parsed (JSON with titles[] or one title per line).";
-        }
-        return;
-      }
-      const bases = getRemoteCharmBasesFromList(listEl);
-      if (!bases.length) {
-        if (charmTocApplyStatus) {
-          charmTocApplyStatus.textContent = "No remote manual in the list yet.";
-        }
-        return;
-      }
-      const sk =
-        charmSectionSel && !charmSectionSel.disabled ? charmSectionSel.value : "";
-      for (const b of bases) {
-        saveCharmTocToSession(b, sk, titles);
-      }
-      const secLabel =
-        sk === "repair"
-          ? "Repair and Diagnosis"
-          : sk === "parts"
-            ? "Parts and Labor"
-            : "vehicle root";
-      if (charmTocApplyStatus) {
-        charmTocApplyStatus.textContent = `Saved ${titles.length} title(s) for ${bases.length} URL(s) · ${secLabel}.`;
-      }
-      refreshCharmTocUi();
-    });
-  }
-
-  if (charmTocPaste) {
-    charmTocPaste.addEventListener("input", () => {
-      if (charmTocApplyStatus) charmTocApplyStatus.textContent = "";
+      syncRemoteManualHrefs();
     });
   }
 

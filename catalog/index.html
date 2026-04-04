@@ -9,14 +9,6 @@
   <body>
     <header class="header">
       <h1>Pick a vehicle</h1>
-      <p class="lede">
-        <strong>Local</strong> manuals come from your CHARM exports (e.g. <code>Acura/</code>) via
-        <code>scripts/build_charm_manifest.py</code>. <strong>All other</strong> make/year choices use
-        <code>charm-coverage.json</code> and link to the right year on
-        <a href="https://charm.li/" rel="noopener">charm.li</a> when you have no export yet.
-        See <a href="../ATTRIBUTION.md">ATTRIBUTION.md</a> for credit and
-        <a href="https://openlaborproject.com/">Open Labor Project</a> (Xerostatic).
-      </p>
     </header>
 
     <main class="main">
@@ -46,16 +38,6 @@
           </select>
         </div>
         <div class="field field-wide">
-          <span id="topic-categories-label" class="field-label-static">
-            Manual topics <span class="hint">(scroll — select any)</span>
-          </span>
-          <div
-            id="topic-categories-strip"
-            class="topic-categories-strip"
-            role="group"
-            aria-labelledby="topic-categories-label"
-          ></div>
-          <p id="topic-keywords-line" class="topic-keywords-line hidden" aria-live="polite"></p>
           <label for="charm-section" class="field-label-static charm-deep-label"
             >CHARM menu section</label
           >
@@ -64,65 +46,13 @@
             <option value="repair">Repair and Diagnosis</option>
             <option value="parts">Parts and Labor</option>
           </select>
-          <label for="manual-search-text" class="field-label-static charm-deep-label"
-            >Search on that CHARM page</label
-          >
-          <input
-            type="text"
-            id="manual-search-text"
-            class="manual-search-input"
-            disabled
-            autocomplete="off"
-            list="charm-search-datalist"
-            placeholder="e.g. ALL Diagnostic Trouble Codes (DTC), Fluids, Labor time"
-          />
           <p id="charm-deep-hint" class="charm-deep-hint hidden">
-            Section and search apply when you open an Operation CHARM (remote) manual. Local exports open
-            your files as usual; these fields are disabled for that vehicle.
+            For remote charm.li manuals, the section choice updates the link below. Local exports open your files as
+            usual; this control is disabled for those vehicles.
           </p>
           <p class="charm-scroll-text-hint">
-            Click the manual link to open the CHARM section (new tab). If the search box has text, use
-            “Google · this folder” next to that link for a Google search scoped to the same path on
-            <a href="https://charm.li/" rel="noopener noreferrer">charm.li</a> — that uses a normal link so popup
-            blockers cannot stop it.
+            Click a manual link to open Operation CHARM in a new tab (same site you use in the browser).
           </p>
-          <details class="charm-toc-panel">
-            <summary class="charm-toc-summary">Load CHARM table of contents (for search suggestions)</summary>
-            <p class="charm-toc-lede">
-              This page cannot read charm.li directly (browser security). If
-              <code>charm-section-toc-cache.json</code> or <code>.json.gz</code> is present (build with
-              <code>scripts/build_charm_section_toc_cache.py</code>), suggestions load automatically. Otherwise,
-              after you open <strong>Repair and Diagnosis</strong> or <strong>Parts and Labor</strong> on charm.li,
-              click <strong>Expand All</strong>, run the bookmarklet there, or paste JSON / one title per line
-              below.
-            </p>
-            <p class="charm-toc-actions">
-              <button type="button" id="charm-toc-copy-bookmarklet" class="charm-toc-btn">
-                Copy bookmarklet for charm.li
-              </button>
-              <span id="charm-toc-copy-status" class="charm-toc-inline-status" aria-live="polite"></span>
-            </p>
-            <p class="charm-toc-hint">
-              Add a new bookmark in your browser, paste the copied line as the URL, then open that bookmark while
-              you are on the expanded CHARM page. It copies JSON to the clipboard.
-            </p>
-            <label for="charm-toc-paste" class="field-label-static charm-deep-label">Paste titles (JSON or lines)</label>
-            <textarea
-              id="charm-toc-paste"
-              class="charm-toc-paste"
-              rows="4"
-              autocomplete="off"
-              placeholder='{"titles":["Spark Plug","Fluid - A/T"]} or one title per line'
-            ></textarea>
-            <p class="charm-toc-actions">
-              <button type="button" id="charm-toc-apply" class="charm-toc-btn" disabled>
-                Save for this manual &amp; CHARM section
-              </button>
-              <span id="charm-toc-apply-status" class="charm-toc-inline-status" aria-live="polite"></span>
-            </p>
-            <p id="charm-toc-storage-hint" class="charm-toc-hint"></p>
-          </details>
-          <datalist id="charm-search-datalist"></datalist>
         </div>
       </section>
 
@@ -130,31 +60,13 @@
         <h2>Manual</h2>
         <p id="status" class="status">Load data to search.</p>
         <ul id="manual-list" class="manual-list hidden"></ul>
-        <p id="charm-google-fallback" class="charm-google-fallback hidden" role="status">
-          <a
-            id="charm-google-fallback-link"
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Open Google search scoped to this CHARM folder</a
-          >
-          <span class="charm-google-fallback-note">
-            — same as the “Google · this folder” link beside the manual when several vehicles match.
-          </span>
-        </p>
       </section>
     </main>
 
     <footer class="footer">
-      <p>
-        <strong>Setup:</strong>
-        <code>python scripts/build_charm_manifest.py</code>, then serve the repo root
-        (<code>python -m http.server 8080</code>) and open <code>/catalog/</code>. Add CHARM folders
-        and list them in <code>charm-manifest.config.json</code> (<code>charmDirs</code>).
-      </p>
       <p class="attribution">
-        Manual content: <a href="https://charm.li/" rel="noopener">Operation CHARM</a>
-        — attribute per their terms; see <a href="../ATTRIBUTION.md">ATTRIBUTION.md</a>.
+        Manuals: <a href="https://charm.li/" rel="noopener">Operation CHARM</a>
+        — <a href="../ATTRIBUTION.md">ATTRIBUTION.md</a>
       </p>
     </footer>
 
