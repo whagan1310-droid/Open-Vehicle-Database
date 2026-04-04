@@ -45,12 +45,103 @@
             <option value="">—</option>
           </select>
         </div>
+        <div class="field field-wide">
+          <span id="topic-categories-label" class="field-label-static">
+            Manual topics <span class="hint">(scroll — select any)</span>
+          </span>
+          <div
+            id="topic-categories-strip"
+            class="topic-categories-strip"
+            role="group"
+            aria-labelledby="topic-categories-label"
+          ></div>
+          <p id="topic-keywords-line" class="topic-keywords-line hidden" aria-live="polite"></p>
+          <label for="charm-section" class="field-label-static charm-deep-label"
+            >CHARM menu section</label
+          >
+          <select id="charm-section" class="charm-deep-select" disabled>
+            <option value="">Vehicle menu (root)</option>
+            <option value="repair">Repair and Diagnosis</option>
+            <option value="parts">Parts and Labor</option>
+          </select>
+          <label for="manual-search-text" class="field-label-static charm-deep-label"
+            >Search on that CHARM page</label
+          >
+          <input
+            type="text"
+            id="manual-search-text"
+            class="manual-search-input"
+            disabled
+            autocomplete="off"
+            list="charm-search-datalist"
+            placeholder="e.g. ALL Diagnostic Trouble Codes (DTC), Fluids, Labor time"
+          />
+          <p id="charm-deep-hint" class="charm-deep-hint hidden">
+            Section and search apply when you open an Operation CHARM (remote) manual. Local exports open
+            your files as usual; these fields are disabled for that vehicle.
+          </p>
+          <p class="charm-scroll-text-hint">
+            Click the manual link to open the CHARM section (new tab). If the search box has text, use
+            “Google · this folder” next to that link for a Google search scoped to the same path on
+            <a href="https://charm.li/" rel="noopener noreferrer">charm.li</a> — that uses a normal link so popup
+            blockers cannot stop it.
+          </p>
+          <details class="charm-toc-panel">
+            <summary class="charm-toc-summary">Load CHARM table of contents (for search suggestions)</summary>
+            <p class="charm-toc-lede">
+              This page cannot read charm.li directly (browser security). If
+              <code>charm-section-toc-cache.json</code> is present (build with
+              <code>scripts/build_charm_section_toc_cache.py</code>), suggestions load automatically. Otherwise,
+              after you open <strong>Repair and Diagnosis</strong> or <strong>Parts and Labor</strong> on charm.li,
+              click <strong>Expand All</strong>, run the bookmarklet there, or paste JSON / one title per line
+              below.
+            </p>
+            <p class="charm-toc-actions">
+              <button type="button" id="charm-toc-copy-bookmarklet" class="charm-toc-btn">
+                Copy bookmarklet for charm.li
+              </button>
+              <span id="charm-toc-copy-status" class="charm-toc-inline-status" aria-live="polite"></span>
+            </p>
+            <p class="charm-toc-hint">
+              Add a new bookmark in your browser, paste the copied line as the URL, then open that bookmark while
+              you are on the expanded CHARM page. It copies JSON to the clipboard.
+            </p>
+            <label for="charm-toc-paste" class="field-label-static charm-deep-label">Paste titles (JSON or lines)</label>
+            <textarea
+              id="charm-toc-paste"
+              class="charm-toc-paste"
+              rows="4"
+              autocomplete="off"
+              placeholder='{"titles":["Spark Plug","Fluid - A/T"]} or one title per line'
+            ></textarea>
+            <p class="charm-toc-actions">
+              <button type="button" id="charm-toc-apply" class="charm-toc-btn" disabled>
+                Save for this manual &amp; CHARM section
+              </button>
+              <span id="charm-toc-apply-status" class="charm-toc-inline-status" aria-live="polite"></span>
+            </p>
+            <p id="charm-toc-storage-hint" class="charm-toc-hint"></p>
+          </details>
+          <datalist id="charm-search-datalist"></datalist>
+        </div>
       </section>
 
       <section class="results" aria-live="polite">
         <h2>Manual</h2>
         <p id="status" class="status">Load data to search.</p>
         <ul id="manual-list" class="manual-list hidden"></ul>
+        <p id="charm-google-fallback" class="charm-google-fallback hidden" role="status">
+          <a
+            id="charm-google-fallback-link"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Open Google search scoped to this CHARM folder</a
+          >
+          <span class="charm-google-fallback-note">
+            — same as the “Google · this folder” link beside the manual when several vehicles match.
+          </span>
+        </p>
       </section>
     </main>
 
