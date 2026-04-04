@@ -7,7 +7,9 @@ Reads unique paths from catalog/charm-vehicle-cache.json. Merge/resume: existing
 byPath entries are skipped unless --refetch.
 
 Full coverage can mean tens of thousands of requests; use --limit or --only-path
-for tests. On Windows / Git Bash, avoid % in the argument (shell may strip it); use
+for tests. To commit on GitHub (100 MB file limit), gzip the output for the catalog:
+  python -c "import gzip,shutil; shutil.copyfileobj(open('catalog/charm-section-toc-cache.json','rb'), gzip.open('catalog/charm-section-toc-cache.json.gz','wb',compresslevel=9))"
+The picker loads .json locally first, then .json.gz. On Windows / Git Bash, avoid % in the argument (shell may strip it); use
 a quoted path with spaces instead:
 
   python scripts/build_charm_section_toc_cache.py \\

@@ -4,7 +4,7 @@
  * optional charm-vehicle-cache.json (scraped charm.li year pages → model/engine → vehicle URLs).
  *
  * Remote CHARM “search” cannot call charm.li from the browser (CORS). TOC titles for suggestions:
- * optional charm-section-toc-cache.json (scripts/build_charm_section_toc_cache.py), and/or bookmarklet /
+ * optional charm-section-toc-cache.json or .json.gz (scripts/build_charm_section_toc_cache.py), and/or bookmarklet /
  * fetch_charm_section_toc.py → paste → sessionStorage.
  */
 
@@ -60,14 +60,29 @@ async function loadCharmVehicleCache() {
 let charmSectionTocFileCache = { byPath: {} };
 
 async function loadCharmSectionTocFileCache() {
-  try {
-    const d = await loadJson(
-      new URL("charm-section-toc-cache.json", import.meta.url).href
-    );
+  const apply = (d) => {
     const bp = d && d.byPath;
     charmSectionTocFileCache = {
       byPath: bp && typeof bp === "object" ? bp : {},
     };
+  };
+  const base = import.meta.url;
+  try {
+    apply(await loadJson(new URL("charm-section-toc-cache.json", base).href));
+    return;
+  } catch {
+    /* optional uncompressed local build */
+  }
+  try {
+    const href = new URL("charm-section-toc-cache.json.gz", base).href;
+    const res = await fetch(href, { cache: "no-store" });
+    if (!res.ok) throw new Error(String(res.status));
+    const buf = await res.arrayBuffer();
+    const ds = new DecompressionStream("gzip");
+    const text = await new Response(
+      new Blob([buf]).stream().pipeThrough(ds)
+    ).text();
+    apply(JSON.parse(text));
   } catch {
     charmSectionTocFileCache = { byPath: {} };
   }

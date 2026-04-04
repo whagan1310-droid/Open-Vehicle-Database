@@ -3,3 +3,6 @@ catalog/data/
 
 __pycache__/
 *.py[cod]
+
+# Large local build output; push gzip for GitHub (<100 MB limit).
+catalog/charm-section-toc-cache.json
