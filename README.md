@@ -98,7 +98,7 @@ http://127.0.0.1:8080/catalog/
 | **CHARM menu section** | Dropdown: *Vehicle menu (root)*, *Repair and Diagnosis*, or *Parts and Labor*. **Disabled** until you choose a **remote** charm.li vehicle (no local export for that make/year); it only adjusts the URL opened by the manual link. |
 | **Hint** | Short line: open Operation CHARM in a **new tab** from the manual link. |
 | **Manual** | Status text (e.g. *Select a make.*) and, after you narrow choices, one or more links to local `index.html` / PDF or charm.li. |
-| **Footer** | *Picker Built By* <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark> *— Manuals:* link to [charm.li](https://charm.li/) and **[ATTRIBUTION.md](./ATTRIBUTION.md)**. |
+| **Footer** | *Picker Built By* <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark> *— Manuals:* link to [Operation CHARM](https://charm.li/about.html) and **[ATTRIBUTION.md](./ATTRIBUTION.md)**. |
 
 **Help images shipped in `catalog/`** (used on the live page at `http://127.0.0.1:8080/catalog/`):
 
@@ -182,7 +182,7 @@ On **Windows**, you can use **`Open-Vehicle-Database-Picker-Install.bat`** or **
 
 ![Vehicle catalog — help strip, find-on-charm.li example, and picker filters](catalog/vehicle-picker-reference.png)
 
-**Picker Built By** <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark>— **Manuals:** [Operation CHARM](https://charm.li/) — **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
+**Picker Built By** <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark>— **Manuals:** [Operation CHARM](https://charm.li/about.html) — **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
 
 ---
 
