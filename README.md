@@ -186,6 +186,17 @@ On **Windows**, you can use **`Open-Vehicle-Database-Picker-Install.bat`** or **
 
 ---
 
+## PDF → CHARM Manual Converter (optional tool)
+
+This repository includes a **standalone** converter under **[`tools/pdf-to-charm-manual-converter/`](./tools/pdf-to-charm-manual-converter/)**: a small **FastAPI** service that turns PDF service manuals into **CHARM-style** static HTML (`index.html`, breadcrumbs, `style.css`, embedded or rasterized pages). The **vehicle catalog** does **not** depend on it.
+
+- **How to install, run, and convert:** **[`tools/pdf-to-charm-manual-converter/README.md`](./tools/pdf-to-charm-manual-converter/README.md)**
+- **Typical workflow here:** run the API → download the ZIP → place the unzipped manual folder at the repo root (or another indexed path) → run **`python scripts/build_charm_manifest.py`** so **`catalog/charm-manual-index.json`** includes the new manual.
+
+**GitHub Releases:** a **separate ZIP** of only `tools/pdf-to-charm-manual-converter/` is **optional** (convenience for users who want the tool without cloning the full repo). The tool is already included in the normal **Code → Download ZIP** archive.
+
+---
+
 ## Contributing
 
 **Contributions are welcome.** Whether you fix a typo, add documentation, expand vehicle or procedure coverage, or improve how data is organized, you help keep repair knowledge **free** and **fair**.
