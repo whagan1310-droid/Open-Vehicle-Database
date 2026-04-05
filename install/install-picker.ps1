@@ -65,23 +65,6 @@ function Get-PythonExe {
     return $null
 }
 
-function Open-PickerInBrowserFullscreen {
-    param([string]$Url)
-    $candidates = @(
-        @{ Path = Join-Path $env:ProgramFiles 'Microsoft\Edge\Application\msedge.exe' },
-        @{ Path = Join-Path ${env:ProgramFiles(x86)} 'Microsoft\Edge\Application\msedge.exe' },
-        @{ Path = Join-Path $env:LocalAppData 'Google\Chrome\Application\chrome.exe' },
-        @{ Path = Join-Path $env:ProgramFiles 'Google\Chrome\Application\chrome.exe' }
-    )
-    foreach ($c in $candidates) {
-        if (Test-Path -LiteralPath $c.Path) {
-            Start-Process -FilePath $c.Path -ArgumentList @('--start-fullscreen', $Url)
-            return
-        }
-    }
-    Start-Process $Url
-}
-
 function Invoke-PythonPip {
     param($Python, [string[]]$PipArgs)
     $all = $Python.Args + @('-m', 'pip') + $PipArgs
@@ -165,6 +148,12 @@ Start-Process -FilePath 'cmd.exe' -ArgumentList @('/k', 'call', $serverCmd) -Win
 Start-Sleep -Seconds 2
 $url = 'http://127.0.0.1:8080/catalog/'
 Write-Info "Opening catalog in your browser (fullscreen when Edge/Chrome is found): $url"
-Open-PickerInBrowserFullscreen -Url $url
+$openScript = Join-Path $PSScriptRoot 'open-picker-fullscreen.ps1'
+if (-not (Test-Path -LiteralPath $openScript)) {
+    Write-Info "Missing install\open-picker-fullscreen.ps1"
+    Start-Process $url
+} else {
+    & $openScript -Url $url
+}
 
 Write-Info "Done. A small window is running the server; close it when you are finished browsing the picker."
