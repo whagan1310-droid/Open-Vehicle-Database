@@ -58,7 +58,7 @@ http://127.0.0.1:8080/catalog/
 | Area | Contents |
 |------|-----------|
 | **Title** | *Pick a vehicle* |
-| **How to use this picker** | Short steps under the title (with screenshots): expand the manual on charm.li with **Expand All (for easy ctrl+f)**, then use the browser find bar (**Ctrl+F** / **Cmd+F**). Same idea for **Repair and Diagnosis** and **Parts and Labor**. |
+| **How to use this picker** | Short steps under the title (with screenshots): expand the manual on charm.li with **Expand All (for easy ctrl+f)**, then use the browser find bar (**Ctrl+F** / **Cmd+F**) to jump through matches in the outline (README reference image shows a real charm.li **Repair and Diagnosis** search example). Same idea for **Parts and Labor**. |
 | **Filters** | **Make**, **Year**, **Model**, and **Engine** (labeled *from folder title* for manifest-derived rows). |
 | **CHARM menu section** | Dropdown: *Vehicle menu (root)*, *Repair and Diagnosis*, or *Parts and Labor*. **Disabled** until you choose a **remote** charm.li vehicle (no local export for that make/year); it only adjusts the URL opened by the manual link. |
 | **Hint** | Short line: open Operation CHARM in a **new tab** from the manual link. |
@@ -130,9 +130,9 @@ To add more **local** manuals, either add a folder name to **`charmDirs`**, or p
 3. Open **`http://127.0.0.1:8080/catalog/`** (or `http://localhost:8080/catalog/`).
 4. Use **Make → Year → Model → Engine**. For **remote** CHARM rows, optionally set **CHARM menu section**, then click a **Manual** link (opens in a new tab).
 
-**Reference** — full-page screenshot of the picker at `http://127.0.0.1:8080/catalog/` (dark theme): help strip, filters, manual area, and footer.
+**Reference** — screenshot of the picker at `http://127.0.0.1:8080/catalog/` (dark theme): **How to use this picker** (including the in-browser find example), then **Make** / **Year** and the rest of the flow.
 
-![Vehicle catalog — full page at /catalog/](catalog/vehicle-picker-reference.png)
+![Vehicle catalog — help strip, find-on-charm.li example, and picker filters](catalog/vehicle-picker-reference.png)
 
 **Picker Built By** <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark>— **Manuals:** [Operation CHARM](https://charm.li/) — **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
 
