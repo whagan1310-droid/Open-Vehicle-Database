@@ -239,9 +239,16 @@ select {
 .attribution .attribution-name {
   color: var(--accent);
   font-weight: 600;
-  padding: 0.1em 0.35em;
+  padding: 0.12em 0.4em;
   border-radius: 5px;
-  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  border: 1px solid var(--accent);
+  background: rgba(124, 179, 255, 0.22);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
+}
+
+@media (prefers-color-scheme: light) {
+  .attribution .attribution-name {
+    background: rgba(21, 101, 192, 0.14);
+  }
 }

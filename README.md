@@ -43,7 +43,7 @@ Together, the aim is for this growing library to be **something you can build on
 
 ---
 
-## Vehicle catalog (CHARM picker) — Built by Gam3rGoon
+## Vehicle catalog (CHARM picker) — Built by <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark>
 
 The **`catalog/`** site is a **Make → Year → Model → Engine** picker. GitHub only shows this **documentation** in the README—the picker itself is **not** hosted at a github.io URL. After you **clone** the repo and **start a local web server** (see **Quick start** at the end of this catalog section), open the picker in **your** browser at:
 
@@ -63,7 +63,7 @@ http://127.0.0.1:8080/catalog/
 | **CHARM menu section** | Dropdown: *Vehicle menu (root)*, *Repair and Diagnosis*, or *Parts and Labor*. **Disabled** until you choose a **remote** charm.li vehicle (no local export for that make/year); it only adjusts the URL opened by the manual link. |
 | **Hint** | Short line: open Operation CHARM in a **new tab** from the manual link. |
 | **Manual** | Status text (e.g. *Select a make.*) and, after you narrow choices, one or more links to local `index.html` / PDF or charm.li. |
-| **Footer** | *Picker Built By Gam3rGoon/MasterTech-Pro* — *Manuals:* link to [charm.li](https://charm.li/) and **[ATTRIBUTION.md](./ATTRIBUTION.md)**. |
+| **Footer** | *Picker Built By* <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark> *— Manuals:* link to [charm.li](https://charm.li/) and **[ATTRIBUTION.md](./ATTRIBUTION.md)**. |
 
 Longer setup and indexing notes stay in this README.
 
@@ -134,7 +134,7 @@ To add more **local** manuals, either add a folder name to **`charmDirs`**, or p
 
 ![Vehicle catalog — full page at /catalog/](catalog/vehicle-picker-reference.png)
 
-**Picker Built By Gam3rGoon/MasterTech-Pro**— **Manuals:** [Operation CHARM](https://charm.li/) — **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
+**Picker Built By** <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark>— **Manuals:** [Operation CHARM](https://charm.li/) — **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
 
 ---
 
