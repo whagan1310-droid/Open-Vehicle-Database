@@ -58,12 +58,22 @@ http://127.0.0.1:8080/catalog/
 | Area | Contents |
 |------|-----------|
 | **Title** | *Pick a vehicle* |
-| **How to use this picker** | Short steps under the title (with screenshots): expand the manual on charm.li with **Expand All (for easy ctrl+f)**, then use the browser find bar (**Ctrl+F** / **Cmd+F**) to jump through matches in the outline (README reference image shows a real charm.li **Repair and Diagnosis** search example). Same idea for **Parts and Labor**. |
+| **How to use this picker** | **Five** short steps under the title, with PNG examples from `catalog/`: pick filters → **Manual** link → **Expand All** on charm.li → **Ctrl+F** / **Cmd+F** to find text → note match highlights and **1/N** counter. **Click any help screenshot** to open that PNG in a **new tab** at full resolution (inline images are scaled for layout). Same expand-then-search flow for **Repair and Diagnosis** and **Parts and Labor**. |
 | **Filters** | **Make**, **Year**, **Model**, and **Engine** (labeled *from folder title* for manifest-derived rows). |
 | **CHARM menu section** | Dropdown: *Vehicle menu (root)*, *Repair and Diagnosis*, or *Parts and Labor*. **Disabled** until you choose a **remote** charm.li vehicle (no local export for that make/year); it only adjusts the URL opened by the manual link. |
 | **Hint** | Short line: open Operation CHARM in a **new tab** from the manual link. |
 | **Manual** | Status text (e.g. *Select a make.*) and, after you narrow choices, one or more links to local `index.html` / PDF or charm.li. |
 | **Footer** | *Picker Built By* <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark> *— Manuals:* link to [charm.li](https://charm.li/) and **[ATTRIBUTION.md](./ATTRIBUTION.md)**. |
+
+**Help images shipped in `catalog/`** (used on the live page at `http://127.0.0.1:8080/catalog/`):
+
+| PNG | Role |
+|-----|------|
+| [`picker-help-expand-all.png`](./catalog/picker-help-expand-all.png) | Step **3**: **Expand All (for easy ctrl+f)** on a charm.li manual. |
+| [`picker-help-find-in-page.png`](./catalog/picker-help-find-in-page.png) | Step **4**: browser **Find** on charm.li (wider example, e.g. outline + search). |
+| [`picker-help-find-match-count.png`](./catalog/picker-help-find-match-count.png) | Step **5**: find bar detail — search text and match counter (**e.g. 1/9**). |
+
+**Behavior:** Each image is a normal link (`target="_blank"`). Opening the full PNG in a new tab avoids iframe/modal issues and matches what you see when serving the repo with `python -m http.server 8080` and visiting **`/catalog/`**.
 
 Longer setup and indexing notes stay in this README.
 
@@ -128,7 +138,8 @@ To add more **local** manuals, either add a folder name to **`charmDirs`**, or p
    (`-b 127.0.0.1` avoids some IPv6/localhost quirks on Windows.)
 
 3. Open **`http://127.0.0.1:8080/catalog/`** (or `http://localhost:8080/catalog/`).
-4. Use **Make → Year → Model → Engine**. For **remote** CHARM rows, optionally set **CHARM menu section**, then click a **Manual** link (opens in a new tab).
+4. Read **How to use this picker** at the top; **click** any help screenshot to open it full-size in a new tab.
+5. Use **Make → Year → Model → Engine**. For **remote** CHARM rows, optionally set **CHARM menu section**, then click a **Manual** link (opens in a new tab).
 
 **Reference** — screenshot of the picker at `http://127.0.0.1:8080/catalog/` (dark theme): **How to use this picker** (including the in-browser find example), then **Make** / **Year** and the rest of the flow.
 

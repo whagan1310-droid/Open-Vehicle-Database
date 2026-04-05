@@ -61,6 +61,13 @@ body {
   color: var(--text);
 }
 
+.picker-directions-hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
 .picker-directions-steps {
   margin: 0;
   padding-left: 1.25rem;
@@ -86,13 +93,45 @@ body {
   padding: 0;
 }
 
-.picker-directions-figure img {
+.picker-directions-figure-link {
   display: block;
   max-width: min(100%, 19rem);
   width: 100%;
-  height: auto;
   border-radius: 6px;
   border: 1px solid var(--border);
+  overflow: hidden;
+  line-height: 0;
+  cursor: zoom-in;
+  text-decoration: none;
+  color: inherit;
+}
+
+.picker-directions-figure-link:hover {
+  border-color: var(--accent);
+}
+
+.picker-directions-figure-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.picker-directions-figure-link img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: none;
+  border-radius: 0;
+}
+
+/* Small crop (e.g. find bar + 1/9) — don’t stretch to full help-card width */
+.picker-directions-figure-inline-sm .picker-directions-figure-link {
+  max-width: fit-content;
+  width: auto;
+}
+
+.picker-directions-figure-inline-sm .picker-directions-figure-link img {
+  width: auto;
+  max-width: 100%;
 }
 
 .picker-directions kbd {
