@@ -57,6 +57,8 @@ Use this path if you **do not use Git**: get a copy of the repo from GitHub, ext
 
 **Python** drives the tiny local web server. **Node.js** is installed by the same script when missing (for ecosystem tooling; the picker server itself uses Python). **pip** installs whatever is listed in [`requirements.txt`](./requirements.txt) (the catalog works with the standard library; that file documents the workflow).
 
+**Local manuals and ZIP size:** the repo keeps a **small sample** of offline manuals under **`Acura/`** (about **10%** of the former bulk by storage) so GitHub **Download ZIP** stays faster. The picker still lists other years and models via **Operation CHARM** links in the browser when you pick a vehicle without a local export.
+
 ### Steps (GitHub ZIP)
 
 1. Open the repository on GitHub and choose **Code → Download ZIP**.
