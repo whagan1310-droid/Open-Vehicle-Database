@@ -1,0 +1,17 @@
+# Open Vehicle Database — dependencies for the catalog picker (README quick start)
+#
+# The picker is static files under catalog/. Serving it uses only the Python standard
+# library — no third-party packages are required:
+#   python -m http.server 8080 -b 127.0.0.1
+#
+# Scripts under scripts/ (manifest, CHARM cache, coverage) also use stdlib only.
+#
+# Use Python 3.10 or newer (typing syntax in scripts/).
+#
+# This file exists so collaborators can run:
+#   pip install -r requirements.txt
+# and confirm there are no missing pip packages for the documented workflow.
+#
+# Windows (GitHub ZIP): double-click Open-Vehicle-Database-Picker-Install.bat at the repo root
+# to install Python/Node if needed, run pip install -r requirements.txt, start the server,
+# and open the catalog in your browser.

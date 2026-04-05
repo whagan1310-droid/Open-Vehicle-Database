@@ -43,6 +43,39 @@ Together, the aim is for this growing library to be **something you can build on
 
 ---
 
+## Download the ZIP and run the picker (Windows)
+
+Use this path if you **do not use Git**: get a copy of the repo from GitHub, extract it, and run the included installer once.
+
+### What you need
+
+| Item | Notes |
+|------|--------|
+| **Windows 10 or 11** | The automated installer uses **winget** (comes with *App Installer* on most current systems) to add missing runtimes when possible. |
+| **A normal web browser** | The picker opens at `http://127.0.0.1:8080/catalog/` in your default browser. |
+| **Internet (for some manuals)** | Local HTML/PDF manuals in the ZIP work offline once the server is running. Links to [Operation CHARM](https://charm.li/) need a network connection. |
+
+**Python** drives the tiny local web server. **Node.js** is installed by the same script when missing (for ecosystem tooling; the picker server itself uses Python). **pip** installs whatever is listed in [`requirements.txt`](./requirements.txt) (the catalog works with the standard library; that file documents the workflow).
+
+### Steps (GitHub ZIP)
+
+1. Open the repository on GitHub and choose **Code → Download ZIP**.
+2. **Extract** the ZIP anywhere you like (for example your Desktop).  
+   GitHub often names the folder **`Open-Vehicle-Database-main`**; that is fine—the scripts locate the `catalog/` folder from where you run them.
+3. Open the **extracted folder** so you see **`catalog`**, **`install`**, and the file **`Open-Vehicle-Database-Picker-Install.bat`** at the same level.
+4. **Double-click** **`Open-Vehicle-Database-Picker-Install.bat`**.  
+   - If **Python** or **Node.js** is missing, you may get a **UAC / winget** prompt to install them.  
+   - The script runs **`pip install -r requirements.txt`**, starts the server in a small window, and opens the picker in your browser.
+5. When you are done, **close the minimized “server” window** to stop the local web server.
+
+**Next time** (Python and Node already installed): double-click **`Open-Vehicle-Database-Picker-Launch.bat`** to start the server and open the catalog without running winget or pip again.
+
+**If winget is not available** (older or locked-down PCs): install **[Python 3.10+](https://www.python.org/downloads/)** yourself (enable **Add python.exe to PATH**), open a terminal in the **repo root**, run `pip install -r requirements.txt`, then `python -m http.server 8080 -b 127.0.0.1` and open **`http://127.0.0.1:8080/catalog/`** (same as **Quick start** below).
+
+Optional environment variables for the PowerShell installer (set before running the `.bat` if needed): **`OVDB_SKIP_NODE=1`** skips installing Node.js; **`OVDB_SKIP_PYTHON_INSTALL=1`** skips winget for Python and expects Python already on PATH.
+
+---
+
 ## Vehicle catalog (CHARM picker) — Built by <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark>
 
 The **`catalog/`** site is a **Make → Year → Model → Engine** picker. GitHub only shows this **documentation** in the README—the picker itself is **not** hosted at a github.io URL. After you **clone** the repo and **start a local web server** (see **Quick start** at the end of this catalog section), open the picker in **your** browser at:
@@ -126,7 +159,9 @@ To add more **local** manuals, either add a folder name to **`charmDirs`**, or p
 
 ### How to test picker — By Gam3rGoon
 
-**Quick start** (files already in the repo)
+**Quick start** (files already in the repo, or after extracting the GitHub ZIP)
+
+On **Windows**, you can use **`Open-Vehicle-Database-Picker-Install.bat`** or **`Open-Vehicle-Database-Picker-Launch.bat`** at the repo root instead of the steps below; see **Download the ZIP and run the picker (Windows)** earlier in this README.
 
 1. Open a terminal **at the repo root** (the folder that contains `catalog/`).
 2. Start a local web server, for example:
