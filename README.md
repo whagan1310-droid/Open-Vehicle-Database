@@ -134,7 +134,7 @@ To add more **local** manuals, either add a folder name to **`charmDirs`**, or p
 
 ![Vehicle catalog — full page at /catalog/](catalog/vehicle-picker-reference.png)
 
-Full **attribution** and **inspiration** notes: **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
+**Picker Built By Gam3rGoon/MasterTech-Pro**— **Manuals:** [Operation CHARM](https://charm.li/) — **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
 
 ---
 
