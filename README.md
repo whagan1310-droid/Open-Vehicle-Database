@@ -130,9 +130,9 @@ To add more **local** manuals, either add a folder name to **`charmDirs`**, or p
 3. Open **`http://127.0.0.1:8080/catalog/`** (or `http://localhost:8080/catalog/`).
 4. Use **Make → Year → Model → Engine**. For **remote** CHARM rows, optionally set **CHARM menu section**, then click a **Manual** link (opens in a new tab).
 
-**Reference** — current picker at `http://127.0.0.1:8080/catalog/` (dark theme): **Pick a vehicle**, **How to use this picker** (steps + screenshots), then filters and the rest of the page.
+**Reference** — full-page screenshot of the picker at `http://127.0.0.1:8080/catalog/` (dark theme): help strip, filters, manual area, and footer.
 
-![Vehicle picker — Pick a vehicle and in-page directions](catalog/vehicle-picker-reference.png)
+![Vehicle catalog — full page at /catalog/](catalog/vehicle-picker-reference.png)
 
 Full **attribution** and **inspiration** notes: **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
 
