@@ -219,6 +219,14 @@ The repo ships two **full-tree** Windows download packages on GitHub Releases:
 
 Both include the current **`catalog/`** (picker links remote manuals on **[LEMON Manuals](https://lemon-manuals.la/)**). Rebuild both ZIPs from a clean clone or your working tree:
 
+**FullScreen ZIP only** (build this first if you want the fullscreen release before the windowed one):
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\build_github_release_zips.ps1" -Label "LEMON" -FullScreenOnly
+```
+
+**Both ZIPs** in one run:
+
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\build_github_release_zips.ps1" -Label "LEMON"
 ```
