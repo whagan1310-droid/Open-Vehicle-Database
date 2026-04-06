@@ -296,11 +296,15 @@ def main() -> None:
     try:
         for i, (make_key, year) in enumerate(sorted_pairs, start=1):
             ys = str(year)
+            existing_rows = by_make_year.get(make_key, {}).get(ys)
+            # Re-fetch when the only cached data is an empty list (failed parse, transient
+            # error page, or site updated since last run). Skip only when we have vehicles.
             if (
                 not args.refetch
-                and ys in by_make_year.get(make_key, {})
+                and existing_rows is not None
+                and len(existing_rows) > 0
             ):
-                n = len(by_make_year[make_key][ys])
+                n = len(existing_rows)
                 print(f"[{i}/{total}] {make_key} {year} SKIP (cached, {n} vehicles)")
                 continue
 
