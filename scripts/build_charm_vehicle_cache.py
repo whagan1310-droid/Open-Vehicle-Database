@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Scrape public https://charm.li/{Make}/{year}/ pages and write a compact JSON cache
+Scrape public https://lemon-manuals.la/{Make}/{year}/ pages and write a compact JSON cache
 for the catalog picker (model/engine → manual index URLs). Browsers cannot fetch
-charm.li from static catalog/ (CORS), so this is build-time data.
+the manual site from static catalog/ (CORS), so this is build-time data.
 
 Be polite: use modest delays; run occasionally, not in a tight loop.
 
@@ -54,7 +54,7 @@ LINK_RE = re.compile(r'<li><a href="(/[^"]+/)">([^<]+)</a>')
 
 def label_from_charm_href_path(path: str) -> str:
     """
-    charm.li year pages use <a> text that is sometimes only the engine line under a
+    LEMON / CHARM-style year pages use <a> text that is sometimes only the engine line under a
     plain-text group title (e.g. link text \"V8-5.3L VIN T\" under \"Avalanche 1500 2WD\").
     The href path always includes the full variant after /Make/year/.
     """
@@ -74,7 +74,7 @@ def fetch(url: str) -> str:
 
 
 def charm_make_path_segment(charm_name: str) -> str:
-    """Path segment as used on charm.li (spaces → %20, etc.)."""
+    """Path segment as used on the manual site (spaces → %20, etc.)."""
     return urllib.parse.quote(charm_name, safe="")
 
 
@@ -187,7 +187,7 @@ def write_cache_payload(
     by_make_year: dict[str, dict[str, list[dict]]],
 ) -> None:
     payload = {
-        "description": "Scraped public charm.li year index pages — rebuild with "
+        "description": "Scraped public lemon-manuals.la year index pages — rebuild with "
         "scripts/build_charm_vehicle_cache.py; do not edit by hand.",
         "version": 1,
         "charmBaseUrl": base,
@@ -262,7 +262,7 @@ def main() -> None:
         raise SystemExit(f"Missing {cov_path}; run sync_charm_coverage_from_charm_li.py first.")
 
     cov = load_json(cov_path)
-    base = (cov.get("charmBaseUrl") or "https://charm.li").rstrip("/")
+    base = (cov.get("charmBaseUrl") or "https://lemon-manuals.la").rstrip("/")
 
     if args.scope == "manifest":
         pairs = pairs_from_manifest(root)

@@ -284,9 +284,9 @@ def main() -> None:
         raise SystemExit(f"Missing {vc_path}")
 
     data = load_json(vc_path)
-    base = (data.get("charmBaseUrl") or "https://charm.li").rstrip("/")
+    base = (data.get("charmBaseUrl") or "https://lemon-manuals.la").rstrip("/")
     base_u = urllib.parse.urlparse(base if "://" in base else f"https://{base}")
-    charm_host = base_u.netloc.split("@")[-1] or "charm.li"
+    charm_host = base_u.netloc.split("@")[-1] or "lemon-manuals.la"
 
     if args.only_path:
         paths = [normalize_path_dir(p) for p in args.only_path]

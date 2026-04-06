@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Fetch a charm.li manual index page (e.g. Repair and Diagnosis or Parts and Labor)
+Fetch a lemon-manuals.la manual index page (e.g. Repair and Diagnosis or Parts and Labor)
 and print JSON { "sourceUrl", "titles" } for pasting into the catalog TOC box.
 
 Same data shape as the in-browser bookmarklet. Use when you prefer a script over
@@ -8,7 +8,7 @@ the bookmarklet.
 
 Example:
   python scripts/fetch_charm_section_toc.py \\
-    "https://charm.li/Chevrolet/2009/Silverado%201500%204WD%20V8-6.0L/Repair%20and%20Diagnosis/"
+    "https://lemon-manuals.la/Chevrolet/2009/Silverado%201500%204WD%20V8-6.0L/Repair%20and%20Diagnosis/"
 """
 from __future__ import annotations
 
@@ -37,7 +37,7 @@ def fetch(url: str) -> str:
 
 class CharmSession:
     """
-    Reuse one HTTPS connection to charm.li (or another host) for many GETs.
+    Reuse one HTTPS connection to lemon-manuals.la (or another host) for many GETs.
     Cuts TLS handshake overhead vs. one urllib.urlopen per URL — same request
     rate as sequential fetches, less connection churn on the server.
     """
@@ -150,7 +150,7 @@ def titles_from_html(page_url: str, html: str) -> list[str]:
 
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("url", help="Full URL to the expanded section root on charm.li")
+    p.add_argument("url", help="Full URL to the expanded section root on lemon-manuals.la")
     p.add_argument(
         "--compact",
         action="store_true",

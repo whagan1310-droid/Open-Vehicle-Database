@@ -1,8 +1,10 @@
 /**
- * Vehicle picker: local CHARM exports (charm-manual-index.json) +
- * Operation CHARM coverage (charm-coverage.json) +
- * charm-vehicle-cache.json (charm.li year pages → model/engine → vehicle URLs).
+ * Vehicle picker: local CHARM-style exports (charm-manual-index.json) +
+ * coverage (charm-coverage.json) +
+ * charm-vehicle-cache.json (manual site year pages → model/engine → vehicle URLs).
  */
+
+const MANUAL_SITE_BASE = "https://lemon-manuals.la";
 
 async function loadJson(url) {
   const res = await fetch(url, { cache: "no-store" });
@@ -46,7 +48,7 @@ async function loadCharmVehicleCache() {
   } catch {
     return {
       version: 1,
-      charmBaseUrl: "https://charm.li",
+      charmBaseUrl: MANUAL_SITE_BASE,
       byMakeYear: {},
     };
   }
@@ -81,7 +83,7 @@ function populateSelect(el, values, placeholder, valueToLabel) {
 const ENGINE_EMPTY = "__none__";
 
 /**
- * Appended after the vehicle directory URL (same as Operation CHARM directory names).
+ * Appended after the vehicle directory URL (same path layout as on the manual site).
  */
 const CHARM_SECTION_SUFFIX = {
   "": "",
@@ -139,7 +141,7 @@ function remoteRowsForMakeYear(vehicleCache, makeKey, yearStr) {
 }
 
 function remoteManualHref(vehicleCache, row) {
-  const base = (vehicleCache.charmBaseUrl || "https://charm.li").replace(
+  const base = (vehicleCache.charmBaseUrl || MANUAL_SITE_BASE).replace(
     /\/$/,
     ""
   );
@@ -152,7 +154,7 @@ function remoteManualHref(vehicleCache, row) {
 function charmYearUrl(coverage, coverageByKey, makeKey, yearStr) {
   const row = coverageByKey.get(makeKey);
   if (!row) return null;
-  const base = (coverage.charmBaseUrl || "https://charm.li").replace(/\/$/, "");
+  const base = (coverage.charmBaseUrl || MANUAL_SITE_BASE).replace(/\/$/, "");
   const y = parseInt(yearStr, 10);
   if (Number.isNaN(y)) return null;
   return `${base}/${encodeURIComponent(row.charmName)}/${y}/`;
@@ -176,7 +178,7 @@ async function main() {
   const coverageByKey = new Map();
   let vehicleCache = {
     version: 1,
-    charmBaseUrl: "https://charm.li",
+    charmBaseUrl: MANUAL_SITE_BASE,
     byMakeYear: {},
   };
 
@@ -320,7 +322,7 @@ async function main() {
     a.rel = "noopener noreferrer";
     bindManualOpensNewTab(a, url);
     const name = makeLabel(makeKey);
-    a.textContent = `Browse ${name} ${y} on charm.li (manual UI)`;
+    a.textContent = `Browse ${name} ${y} on lemon-manuals.la (manual UI)`;
     li.appendChild(a);
     listEl.appendChild(li);
   }
@@ -329,7 +331,7 @@ async function main() {
     listEl.innerHTML = "";
     listEl.classList.remove("hidden");
     status(
-      "Index not yet added — this make/year is not in charm-vehicle-cache.json. Run scripts/build_charm_vehicle_cache.py (see README), or open the year page on charm.li."
+      "Index not yet added — this make/year is not in charm-vehicle-cache.json. Run scripts/build_charm_vehicle_cache.py (see README), or open the year page on lemon-manuals.la."
     );
     appendCharmYearBrowseLink(makeKey, y);
   }
@@ -410,7 +412,7 @@ async function main() {
       engineSel.disabled = true;
       listEl.classList.add("hidden");
       listEl.innerHTML = "";
-      status("Select year, then model (or charm.li).");
+      status("Select year, then model (or lemon-manuals.la).");
     } finally {
       updateCharmDeepControlsState();
     }
@@ -456,7 +458,7 @@ async function main() {
         engineSel.disabled = true;
         listEl.classList.add("hidden");
         listEl.innerHTML = "";
-        status("Select model and engine, then open the manual on Operation CHARM.");
+        status("Select model and engine, then open the manual on LEMON Manuals.");
       }
     } finally {
       updateCharmDeepControlsState();
@@ -552,7 +554,7 @@ async function main() {
         }
         if (subset.length === 1) {
           status(
-            "Optional: choose CHARM menu section, then open the manual (new tab)."
+            "Optional: choose manual menu section, then open the manual (new tab)."
           );
         } else {
           status(`${subset.length} manuals match — pick one below (new tab).`);

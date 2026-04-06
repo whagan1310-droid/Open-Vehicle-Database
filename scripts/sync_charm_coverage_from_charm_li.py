@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Fetch make/year lists from https://charm.li/ and write catalog/charm-coverage.json.
+Fetch make/year lists from https://lemon-manuals.la/ and write catalog/charm-coverage.json.
 
 This is the source of truth for picker coverage (fixes hand-maintained list drift).
 Requires network. Be polite: run occasionally, not in a tight loop.
@@ -17,7 +17,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-BASE = "https://charm.li"
+BASE = "https://lemon-manuals.la"
 UA = "Open-Vehicle-Database-coverage-sync/1.0 (community mirror; +https://github.com)"
 
 
@@ -54,7 +54,7 @@ def main() -> None:
     home_html = fetch(f"{BASE}/")
     make_entries = parse_home_makes(home_html)
     if not make_entries:
-        raise SystemExit("Could not parse makes from charm.li home page.")
+        raise SystemExit("Could not parse makes from lemon-manuals.la home page.")
 
     makes_out = []
     for href_path, charm_name in make_entries:
@@ -80,8 +80,8 @@ def main() -> None:
 
     makes_out.sort(key=lambda x: x["charmName"].lower())
     payload = {
-        "description": "Synced from Operation CHARM (https://charm.li/) — do not edit by hand; re-run sync script.",
-        "charmBaseUrl": "https://charm.li",
+        "description": "Synced from LEMON Manuals (https://lemon-manuals.la/) — do not edit by hand; re-run sync script.",
+        "charmBaseUrl": "https://lemon-manuals.la",
         "syncedFrom": BASE,
         "makes": makes_out,
     }

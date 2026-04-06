@@ -1,10 +1,22 @@
 # Open Vehicle Database
 
-**Code and scripts:** All **software** in this repository—`scripts/`, the **`catalog/`** picker, build tooling, and automation—is written and maintained by **Gam3rGoon** and **MasterTech-Pro**. **Operation CHARM** and **Xerostatic** ([**ShopBase**](https://shopbasehq.com/), **[Open Labor Project](https://openlaborproject.com/)**) **did not** author this codebase; they appear only as **inspiration**, **ecosystem context**, and (where applicable) **attributed manual sources** or links to their sites. What comes from where is spelled out in **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
+**Code and scripts:** All **software** in this repository—`scripts/`, the **`catalog/`** picker, build tooling, and automation—is written and maintained by **Gam3rGoon** and **MasterTech-Pro**. **[LEMON Manuals](https://lemon-manuals.la/)**, **Operation CHARM**, and **Xerostatic** ([**ShopBase**](https://shopbasehq.com/), **[Open Labor Project](https://openlaborproject.com/)**) **did not** author this codebase; they appear only as **inspiration**, **ecosystem context**, **attributed manual sources**, or **live sites** we link to and sync from. What comes from where is spelled out in **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
 
-A community-driven, **free** automotive knowledge library—built in the spirit of **MasterTech-Pro**, **[ShopBase](https://shopbasehq.com/)**, **[Open Labor Project](https://openlaborproject.com/)**, **[Operation CHARM](https://charm.li/)**, and the broader **open repair-data** movement. Contributors are always welcome in the open realm of **equal right to repair**: *by the people, for the people*—so that repair information stays accessible instead of locked behind paywalls and gatekeeping.
+A community-driven, **free** automotive knowledge library—built in the spirit of **MasterTech-Pro**, **[ShopBase](https://shopbasehq.com/)**, **[Open Labor Project](https://openlaborproject.com/)**, **[LEMON Manuals](https://lemon-manuals.la/)** (**[https://lemon-manuals.la/](https://lemon-manuals.la/)** — **canonical live manual host** for remote picker links and scraper updates), **Operation CHARM** (historical **CHARM-style** bundled exports, e.g. under `Acura/`), and the broader **open repair-data** movement. Contributors are always welcome in the open realm of **equal right to repair**: *by the people, for the people*—so that repair information stays accessible instead of locked behind paywalls and gatekeeping.
 
-**Attribution and inspirations** (CHARM, **[ShopBase](https://shopbasehq.com/)**, **[Open Labor Project](https://openlaborproject.com/)**, catalog picker notes) are summarized in **[ATTRIBUTION.md](./ATTRIBUTION.md)**. Inspiration from **[plowman/open-vehicle-db](https://github.com/plowman/open-vehicle-db)**.
+**Attribution and inspirations** (LEMON, CHARM-style exports, **[ShopBase](https://shopbasehq.com/)**, **[Open Labor Project](https://openlaborproject.com/)**, catalog picker notes) are summarized in **[ATTRIBUTION.md](./ATTRIBUTION.md)**. Inspiration from **[plowman/open-vehicle-db](https://github.com/plowman/open-vehicle-db)**.
+
+---
+
+## Live manual site — where remote updates come from
+
+**[LEMON Manuals](https://lemon-manuals.la/)** at **[https://lemon-manuals.la/](https://lemon-manuals.la/)** is the **canonical public manual host** for **remote** use in this repo:
+
+- The **`catalog/`** picker opens manuals on **lemon-manuals.la** when there is no local export.
+- **`catalog/charm-coverage.json`** is synced from the live LEMON site (`scripts/sync_charm_coverage_from_charm_li.py`).
+- **`catalog/charm-vehicle-cache.json`** is built from LEMON’s public **`/{Make}/{year}/`** pages (`scripts/build_charm_vehicle_cache.py`).
+
+**All ongoing updates** to coverage and vehicle-cache JSON in this project are intended to track **LEMON Manuals**. Use modest request spacing (e.g. `--sleep` on scrape scripts), run scrapes occasionally, and follow **LEMON’s** terms.
 
 ---
 
@@ -37,7 +49,8 @@ Together, the aim is for this growing library to be **something you can build on
 | Resource | How we relate to it |
 |----------|---------------------|
 | **[ShopBase](https://shopbasehq.com/)**, **[Open Labor Project](https://openlaborproject.com/)** | **Inspiration & ecosystem alignment** — free labor, specs, DTCs, and shop tools. We **thank and credit** Xerostatic; we do **not** ship OLP data here. |
-| **[Operation CHARM (charm.li)](https://charm.li/)** | **Manual content** — CHARM exports in this repo (e.g. under `Acura/`) should be **attributed** per CHARM’s terms. See [ATTRIBUTION.md](./ATTRIBUTION.md). |
+| **[LEMON Manuals](https://lemon-manuals.la/)** (**[https://lemon-manuals.la/](https://lemon-manuals.la/)**) | **Live manuals & scraper source of truth** — remote picker links, **`charm-coverage.json`**, and **`charm-vehicle-cache.json`** are maintained from this site. See [ATTRIBUTION.md](./ATTRIBUTION.md). |
+| **Operation CHARM** (historical) | **Bundled CHARM-style exports** in this repo (e.g. under `Acura/`) — **attribute** per original CHARM terms where applicable. See [ATTRIBUTION.md](./ATTRIBUTION.md). |
 | **[plowman/open-vehicle-db](https://github.com/plowman/open-vehicle-db)** | **Past inspiration** for a structured vehicle picker; **we do not redistribute their JSON.** The `catalog/` picker uses **your folder names** only. |
 | **MasterTech-Pro (Gam3rGoon)** | **Values / lineage** — professional, technician-focused tooling as a guiding reference. |
 
@@ -53,11 +66,11 @@ Use this path if you **do not use Git**: get a copy of the repo from GitHub, ext
 |------|--------|
 | **Windows 10 or 11** | The automated installer uses **winget** (comes with *App Installer* on most current systems) to add missing runtimes when possible. |
 | **A normal web browser** | The picker opens at `http://127.0.0.1:8080/catalog/` in your default browser. |
-| **Internet (for some manuals)** | Local HTML/PDF manuals in the ZIP work offline once the server is running. Links to [Operation CHARM](https://charm.li/) need a network connection. |
+| **Internet (for some manuals)** | Local HTML/PDF manuals in the ZIP work offline once the server is running. Links to **[LEMON Manuals](https://lemon-manuals.la/)** ([https://lemon-manuals.la/](https://lemon-manuals.la/)) for remote manuals need a network connection. |
 
 **Python** drives the tiny local web server. **Node.js** is installed by the same script when missing (for ecosystem tooling; the picker server itself uses Python). **pip** installs whatever is listed in [`requirements.txt`](./requirements.txt) (the catalog works with the standard library; that file documents the workflow).
 
-**Local manuals and ZIP size:** the repo keeps a **small sample** of offline manuals under **`Acura/`** (about **10%** of the former bulk by storage) so GitHub **Download ZIP** stays faster. The picker still lists other years and models via **Operation CHARM** links in the browser when you pick a vehicle without a local export.
+**Local manuals and ZIP size:** the repo keeps a **small sample** of offline manuals under **`Acura/`** (about **10%** of the former bulk by storage) so GitHub **Download ZIP** stays faster. The picker still lists other years and models via **[LEMON Manuals](https://lemon-manuals.la/)** links in the browser when you pick a vehicle without a local export.
 
 ### Steps (GitHub ZIP)
 
@@ -78,7 +91,7 @@ Optional environment variables for the PowerShell installer (set before running 
 
 ---
 
-## Vehicle catalog (CHARM picker) — Built by <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark>
+## Vehicle catalog (picker) — Built by <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark>
 
 The **`catalog/`** site is a **Make → Year → Model → Engine** picker. GitHub only shows this **documentation** in the README—the picker itself is **not** hosted at a github.io URL. After you **clone** the repo and **start a local web server** (see **Quick start** at the end of this catalog section), open the picker in **your** browser at:
 
@@ -93,19 +106,19 @@ http://127.0.0.1:8080/catalog/
 | Area | Contents |
 |------|-----------|
 | **Title** | *Pick a vehicle* |
-| **How to use this picker** | **Five** short steps under the title, with PNG examples from `catalog/`: pick filters → **Manual** link → **Expand All** on charm.li → **Ctrl+F** / **Cmd+F** to find text → note match highlights and **1/N** counter. **Click any help screenshot** to open that PNG in a **new tab** at full resolution (inline images are scaled for layout). Same expand-then-search flow for **Repair and Diagnosis** and **Parts and Labor**. |
+| **How to use this picker** | **Five** short steps under the title, with PNG examples from `catalog/`: pick filters → **Manual** link → **Expand All** on [lemon-manuals.la](https://lemon-manuals.la/) → **Ctrl+F** / **Cmd+F** to find text → note match highlights and **1/N** counter. **Click any help screenshot** to open that PNG in a **new tab** at full resolution (inline images are scaled for layout). Same expand-then-search flow for **Repair and Diagnosis** and **Parts and Labor**. |
 | **Filters** | **Make**, **Year**, **Model**, and **Engine** (labeled *from folder title* for manifest-derived rows). |
-| **CHARM menu section** | Dropdown: *Vehicle menu (root)*, *Repair and Diagnosis*, or *Parts and Labor*. **Disabled** until you choose a **remote** charm.li vehicle (no local export for that make/year); it only adjusts the URL opened by the manual link. |
-| **Hint** | Short line: open Operation CHARM in a **new tab** from the manual link. |
-| **Manual** | Status text (e.g. *Select a make.*) and, after you narrow choices, one or more links to local `index.html` / PDF or charm.li. |
-| **Footer** | *Picker Built By* <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark> *— Manuals:* link to [Operation CHARM](https://charm.li/about.html) and **[ATTRIBUTION.md](./ATTRIBUTION.md)**. |
+| **Manual menu section** | Dropdown: *Vehicle menu (root)*, *Repair and Diagnosis*, or *Parts and Labor*. **Disabled** until you choose a **remote** [LEMON Manuals](https://lemon-manuals.la/) vehicle (no local export for that make/year); it only adjusts the URL opened by the manual link. |
+| **Hint** | Short line: open **LEMON Manuals** in a **new tab** from the manual link. |
+| **Manual** | Status text (e.g. *Select a make.*) and, after you narrow choices, one or more links to local `index.html` / PDF or **lemon-manuals.la**. |
+| **Footer** | *Picker Built By* <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark> *— Manuals:* link to [LEMON Manuals](https://lemon-manuals.la/about.html) and **[ATTRIBUTION.md](./ATTRIBUTION.md)**. |
 
 **Help images shipped in `catalog/`** (used on the live page at `http://127.0.0.1:8080/catalog/`):
 
 | PNG | Role |
 |-----|------|
-| [`picker-help-expand-all.png`](./catalog/picker-help-expand-all.png) | Step **3**: **Expand All (for easy ctrl+f)** on a charm.li manual. |
-| [`picker-help-find-in-page.png`](./catalog/picker-help-find-in-page.png) | Step **4**: browser **Find** on charm.li (wider example, e.g. outline + search). |
+| [`picker-help-expand-all.png`](./catalog/picker-help-expand-all.png) | Step **3**: **Expand All (for easy ctrl+f)** on a LEMON Manuals page. |
+| [`picker-help-find-in-page.png`](./catalog/picker-help-find-in-page.png) | Step **4**: browser **Find** on LEMON Manuals (wider example, e.g. outline + search). |
 | [`picker-help-find-match-count.png`](./catalog/picker-help-find-match-count.png) | Step **5**: find bar detail — search text and match counter (**e.g. 1/9**). |
 
 **Behavior:** Each image is a normal link (`target="_blank"`). Opening the full PNG in a new tab avoids iframe/modal issues and matches what you see when serving the repo with `python -m http.server 8080` and visiting **`/catalog/`**.
@@ -113,19 +126,19 @@ http://127.0.0.1:8080/catalog/
 Longer setup and indexing notes stay in this README.
 
 - **Local manuals:** when a manual exists under a **`charmDirs`** folder (e.g. **`Acura/`**) or another **top-level folder** the indexer picked up, the picker links to your offline **`index.html`** or **`.pdf`** (one picker row per PDF). **CHARM-style** layouts use subfolders named like **`1994 Acura Integra …`**. **Flat** bundles may use **`index.html`**, **`.pdf`** files, or both; PDFs in the same directory as an **`index.html`** are not double-listed (HTML wins for that folder). Some bundles use **`yearFrom`** / **`yearTo`** instead of a single **`year`** (e.g. John Deere garden tractor PDFs); the picker shows every year in that range. Optional **`makeDisplayNames`** in **`charm-manual-index.json`** overrides the Make dropdown label (e.g. **John-Deere** instead of **John-deere**).
-- **No local export, cached listings:** **`catalog/charm-vehicle-cache.json`** is built by scraping public **`charm.li/{Make}/{year}/`** pages (see script below). The picker fills **model** and **engine** from that file and opens each vehicle’s **directory URL** on [Operation CHARM](https://charm.li/) (CHARM’s UI; you continue to the manual there). On some year pages, CHARM nests links under plain-text group titles (for example *Avalanche 1500 2WD* or *Cobalt*); the anchor text may show only the engine line. **`build_charm_vehicle_cache.py`** takes each vehicle’s full line from the decoded **`href`** path after `/Make/year/`, so grouped entries still get correct **model** and **engine** in the picker.
-- **No cache row for that make/year:** the status shows **Index not yet added**, with an optional link to the **year index** on charm.li so you can still open the manual in the browser.
-- **Remote CHARM only:** when there is **no** local export for that make/year, the picker enables **CHARM menu section** (*Vehicle menu*, *Repair and Diagnosis*, or *Parts and Labor*) so the manual link opens that branch on [charm.li](https://charm.li/) in a new tab. Search and navigation inside the manual happen on charm.li in the browser.
-- **“Deep scan” / in-catalog CHARM search (removed):** Earlier experiments (TOC JSON cache, datalist suggestions, Google-scoped search from the catalog, topic chips) did **not** deliver a reliable in-page search of charm.li—static hosting and browser security (no cross-origin reads of charm.li) make that impractical without a backend. The catalog UI was simplified to **pick a vehicle → open the manual on charm.li**. Optional script output below is only for **your own data/analysis**, not the picker.
+- **No local export, cached listings:** **`catalog/charm-vehicle-cache.json`** is built by scraping public **`lemon-manuals.la/{Make}/{year}/`** pages (see script below). The picker fills **model** and **engine** from that file and opens each vehicle’s **directory URL** on **[LEMON Manuals](https://lemon-manuals.la/)** (you continue to the manual there). On some year pages, the site nests links under plain-text group titles (for example *Avalanche 1500 2WD* or *Cobalt*); the anchor text may show only the engine line. **`build_charm_vehicle_cache.py`** takes each vehicle’s full line from the decoded **`href`** path after `/Make/year/`, so grouped entries still get correct **model** and **engine** in the picker.
+- **No cache row for that make/year:** the status shows **Index not yet added**, with an optional link to the **year index** on **lemon-manuals.la** so you can still open the manual in the browser.
+- **Remote manuals (LEMON):** when there is **no** local export for that make/year, the picker enables **Manual menu section** (*Vehicle menu*, *Repair and Diagnosis*, or *Parts and Labor*) so the manual link opens that branch on **[lemon-manuals.la](https://lemon-manuals.la/)** in a new tab. Search and navigation inside the manual happen on LEMON Manuals in the browser.
+- **“Deep scan” / in-catalog remote search (removed):** Earlier experiments (TOC JSON cache, datalist suggestions, Google-scoped search from the catalog, topic chips) did **not** deliver a reliable in-page search of **lemon-manuals.la**—static hosting and browser security (no cross-origin reads of the live site) make that impractical without a backend. The catalog UI was simplified to **pick a vehicle → open the manual on LEMON Manuals**. Optional script output below is only for **your own data/analysis**, not the picker.
 
 **Setup**
 
-1. **Coverage (make/year ranges):** run `python scripts/sync_charm_coverage_from_charm_li.py` (or `python scripts/generate_charm_coverage.py`) to refresh **`catalog/charm-coverage.json`** from live [charm.li](https://charm.li/) — avoids errors in a hand-written list.
+1. **Coverage (make/year ranges):** run `python scripts/sync_charm_coverage_from_charm_li.py` (or `python scripts/generate_charm_coverage.py`) to refresh **`catalog/charm-coverage.json`** from live **[lemon-manuals.la](https://lemon-manuals.la/)** — avoids errors in a hand-written list.
 2. **Local index:** `python scripts/build_charm_manifest.py` → **`catalog/charm-manual-index.json`**. Folders listed under **`charmDirs`** in **`charm-manifest.config.json`** are always scanned. Set **`scanRepoRootForManuals`** to **`true`** to also scan **other top-level directories** that contain an **`index.html`** (any depth) or **`.pdf`** manuals within **`pdfScanMaxDepth`** levels under that folder (default **3**; set **`0`** to disable PDF indexing). Skips **`catalog/`**, **`scripts/`**, **`.git`**, etc. Use **`manualRootSkip`** to exclude specific folder names from that scan. CLI: **`--scan-repo`** / **`--no-scan-repo`**, **`--pdf-depth N`**. The generated JSON lists every root that was indexed in **`indexRoots`**.
-3. **Vehicle cache (model/engine → remote manual URLs):** `python scripts/build_charm_vehicle_cache.py` → **`catalog/charm-vehicle-cache.json`**. Default **`--scope manifest`** only fetches `(makeKey, year)` pairs that appear in the local manifest (typically matches your **`charmDirs`** exports, e.g. Acura only). For a **full** cache of every make/year on CHARM, use **`--scope coverage`** (many HTTP requests and a large JSON). Example full rebuild: `python scripts/build_charm_vehicle_cache.py --fresh --scope coverage --sleep 0.2` (add **`--refetch`** if you are merging into an existing file and want to force re-download of everything in scope). **Resume / merge:** by default the script **loads** an existing cache and **skips** pairs already present; it **rewrites the JSON after each fetch** (use **`--checkpoint-every N`** to batch writes). **Ctrl+C** saves progress; re-run the **same command** to continue. **`--fresh`** (or **`--no-merge`**) starts empty; **`--refetch`** ignores the skip and re-downloads everything in scope.
+3. **Vehicle cache (model/engine → remote manual URLs):** `python scripts/build_charm_vehicle_cache.py` → **`catalog/charm-vehicle-cache.json`**. Default **`--scope manifest`** only fetches `(makeKey, year)` pairs that appear in the local manifest (typically matches your **`charmDirs`** exports, e.g. Acura only). For a **full** cache of every make/year listed in coverage (from **LEMON Manuals**), use **`--scope coverage`** (many HTTP requests and a large JSON). Example full rebuild: `python scripts/build_charm_vehicle_cache.py --fresh --scope coverage --sleep 0.2` (add **`--refetch`** if you are merging into an existing file and want to force re-download of everything in scope). **Resume / merge:** by default the script **loads** an existing cache and **skips** pairs already present; it **rewrites the JSON after each fetch** (use **`--checkpoint-every N`** to batch writes). **Ctrl+C** saves progress; re-run the **same command** to continue. **`--fresh`** (or **`--no-merge`**) starts empty; **`--refetch`** ignores the skip and re-downloads everything in scope.
 4. **Serve** the repo root (`python -m http.server 8080`) and open **`/catalog/`**.
 
-**Optional — Repair/Parts TOC scrape (not used by the picker):** `python scripts/build_charm_section_toc_cache.py` can still build **`catalog/charm-section-toc-cache.json`** (titles per vehicle path from public charm.li index pages) for **offline analysis or other tools**. Output paths are **gitignored**; the file is often very large. **`scripts/fetch_charm_section_toc.py`** fetches a single URL for manual/CLI use. Neither is required to run the catalog.
+**Optional — Repair/Parts TOC scrape (not used by the picker):** `python scripts/build_charm_section_toc_cache.py` can still build **`catalog/charm-section-toc-cache.json`** (titles per vehicle path from public **lemon-manuals.la** index pages) for **offline analysis or other tools**. Output paths are **gitignored**; the file is often very large. **`scripts/fetch_charm_section_toc.py`** fetches a single URL for manual/CLI use. Neither is required to run the catalog.
 
 **How you refresh coverage later**
 
@@ -135,13 +148,13 @@ python scripts/sync_charm_coverage_from_charm_li.py
 
 (or `python scripts/generate_charm_coverage.py`)
 
-That keeps the picker in sync with CHARM even if they add years or makes later, without you maintaining the big list by hand.
+That keeps the picker in sync with **LEMON Manuals** even if they add years or makes later, without you maintaining the big list by hand.
 
-### Restart, merge, and Charm updates
+### Restart, merge, and LEMON Manuals updates
 
-When CHARM’s site or your exports change, refresh the JSON the picker reads. **`build_charm_vehicle_cache.py`** **merges** by default: re-run the **same** command **without** `--fresh` to skip make/year pairs already in **`charm-vehicle-cache.json`**. It **rewrites after each fetch** (or use **`--checkpoint-every N`**). **Ctrl+C** is safe. Use **`--fresh`** / **`--no-merge`** for an empty start; **`--refetch`** forces re-download for everything in scope.
+When **lemon-manuals.la** or your local exports change, refresh the JSON the picker reads. **`build_charm_vehicle_cache.py`** **merges** by default: re-run the **same** command **without** `--fresh` to skip make/year pairs already in **`charm-vehicle-cache.json`**. It **rewrites after each fetch** (or use **`--checkpoint-every N`**). **Ctrl+C** is safe. Use **`--fresh`** / **`--no-merge`** for an empty start; **`--refetch`** forces re-download for everything in scope.
 
-**After CHARM adds vehicles or years:** refresh **`charm-coverage.json`**, then rebuild **`charm-vehicle-cache.json`** for the new scope.
+**After LEMON Manuals adds vehicles or years:** refresh **`charm-coverage.json`**, then rebuild **`charm-vehicle-cache.json`** for the new scope.
 
 If you run **`build_charm_section_toc_cache.py`** locally, it also merge/resumes the same way (see **`--help`**); that output is optional and not consumed by the catalog.
 
@@ -153,11 +166,11 @@ To add more **local** manuals, either add a folder name to **`charmDirs`**, or p
 
 | Phase | Goal |
 |-------|------|
-| **Now** | Picker + coverage JSON + **`charm-vehicle-cache.json`** for remote **charm.li** links; minimal catalog UI (no in-page CHARM “deep scan”). |
-| **Next** | Optional **CI on a schedule** to regenerate `charm-vehicle-cache.json` (respect CHARM’s terms and rate limits). |
-| **Later** | Small **backend proxy** (same-origin API) if you need live CHARM HTML in-app without committing huge caches. |
-| **Caution** | A static catalog cannot embed or search charm.li content in-page; users open charm.li in the browser. |
-| **Multi-word makes** | Local `index.html` paths use the first token after the year as `make` today (e.g. `Mercedes`). CHARM URLs use full names (e.g. `Mercedes Benz`). Until the manifest script learns multi-token makes, **charm.li** links still work; **local** rows may not merge for those makes without a small parser tweak. |
+| **Now** | Picker + coverage JSON + **`charm-vehicle-cache.json`** for remote **[lemon-manuals.la](https://lemon-manuals.la/)** links; minimal catalog UI (no in-page “deep scan” of the live site). |
+| **Next** | Optional **CI on a schedule** to regenerate `charm-vehicle-cache.json` (respect **LEMON Manuals’** terms and rate limits). |
+| **Later** | Small **backend proxy** (same-origin API) if you need live manual HTML in-app without committing huge caches. |
+| **Caution** | A static catalog cannot embed or search **lemon-manuals.la** content in-page; users open LEMON Manuals in the browser. |
+| **Multi-word makes** | Local `index.html` paths use the first token after the year as `make` today (e.g. `Mercedes`). Remote URLs use full names (e.g. `Mercedes Benz`). Until the manifest script learns multi-token makes, **lemon-manuals.la** links still work; **local** rows may not merge for those makes without a small parser tweak. |
 
 ### How to test picker — By Gam3rGoon
 
@@ -176,13 +189,13 @@ On **Windows**, you can use **`Open-Vehicle-Database-Picker-Install.bat`** or **
 
 3. Open **`http://127.0.0.1:8080/catalog/`** (or `http://localhost:8080/catalog/`).
 4. Read **How to use this picker** at the top; **click** any help screenshot to open it full-size in a new tab.
-5. Use **Make → Year → Model → Engine**. For **remote** CHARM rows, optionally set **CHARM menu section**, then click a **Manual** link (opens in a new tab).
+5. Use **Make → Year → Model → Engine**. For **remote** LEMON Manuals rows, optionally set **Manual menu section**, then click a **Manual** link (opens in a new tab).
 
 **Reference** — screenshot of the picker at `http://127.0.0.1:8080/catalog/` (dark theme): **How to use this picker** (including the in-browser find example), then **Make** / **Year** and the rest of the flow.
 
-![Vehicle catalog — help strip, find-on-charm.li example, and picker filters](catalog/vehicle-picker-reference.png)
+![Vehicle catalog — help strip, find-on-LEMON-Manuals example, and picker filters](catalog/vehicle-picker-reference.png)
 
-**Picker Built By** <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark>— **Manuals:** [Operation CHARM](https://charm.li/about.html) — **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
+**Picker Built By** <mark>Gam3rGoon</mark>/<mark>MasterTech-Pro</mark>— **Manuals:** [LEMON Manuals](https://lemon-manuals.la/about.html) — **[ATTRIBUTION.md](./ATTRIBUTION.md)**.
 
 ---
 

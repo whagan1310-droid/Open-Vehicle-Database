@@ -1,6 +1,6 @@
 # Pdf-to-Charm-Manual-Converter
 
-Standalone **HTTP API** (FastAPI + PyMuPDF) that converts one or more **PDF** service manuals into a **CHARM-style** static HTML bundle: `index.html`, `pages/`, shared **Operation CHARM**–like chrome (`style.css`, breadcrumbs, footer). Output matches the *layout pattern* of manuals on [charm.li](https://charm.li/); it does not recreate OEM HTML at thousands-of-topic granularity unless you use **`render`** mode (page images).
+Standalone **HTTP API** (FastAPI + PyMuPDF) that converts one or more **PDF** service manuals into a **CHARM-style** static HTML bundle: `index.html`, `pages/`, shared **Operation CHARM**–like chrome (`style.css`, breadcrumbs, footer). Output matches the *layout pattern* of manuals on **[LEMON Manuals](https://lemon-manuals.la/)** ([https://lemon-manuals.la/](https://lemon-manuals.la/)) — the live host this repo’s picker and scrapers use; it does not recreate OEM HTML at thousands-of-topic granularity unless you use **`render`** mode (page images).
 
 This tool lives under **`tools/pdf-to-charm-manual-converter/`** in the **Open Vehicle Database** repo. It is **optional**—the **`catalog/`** picker does not require it.
 
@@ -93,7 +93,7 @@ After you unzip the converter output:
 
 3. Serve the repo and open **`/catalog/`** — the picker can pick up the new manual if the manifest indexes it (see root [`README.md`](../../README.md)).
 
-Respect **copyright** and **Operation CHARM** / publisher terms for any manuals you convert or redistribute.
+Respect **copyright** and **Operation CHARM**, **LEMON Manuals**, and publisher terms for any manuals you convert or redistribute.
 
 ---
 
@@ -133,4 +133,4 @@ A **separate release asset** (ZIP containing only this folder + `README.md`) is 
 
 ---
 
-*Tool maintained as part of Open Vehicle Database; see root [`ATTRIBUTION.md`](../../ATTRIBUTION.md) for CHARM and third-party context.*
+*Tool maintained as part of Open Vehicle Database; see root [`ATTRIBUTION.md`](../../ATTRIBUTION.md) for LEMON Manuals, CHARM-style exports, and third-party context.*
