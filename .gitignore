@@ -7,3 +7,6 @@ __pycache__/
 # Local / optional TOC build output (not used by catalog UI).
 catalog/charm-section-toc-cache.json
 catalog/charm-section-toc-cache.json.gz
+
+# Local GitHub release ZIP build output (scripts/build_github_release_zips.ps1).
+release/

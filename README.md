@@ -208,6 +208,23 @@ This repository includes a **standalone** converter under **[`tools/pdf-to-charm
 
 **GitHub Releases:** a **separate ZIP** of only `tools/pdf-to-charm-manual-converter/` is **optional** (convenience for users who want the tool without cloning the full repo). The tool is already included in the normal **Code → Download ZIP** archive.
 
+### Maintainer: Windows vs FullScreen release ZIPs (LEMON Manuals)
+
+The repo ships two **full-tree** Windows download packages on GitHub Releases:
+
+| Package | Browser behavior |
+|---------|------------------|
+| **FullScreen** | After install/launch, Edge or Chrome opens in **fullscreen** (temp profile) when available. |
+| **Windows** | Same files, plus root file **`PICKER_VARIANT_Windows.txt`**, so install/launch opens your **default browser** in a **normal window**. |
+
+Both include the current **`catalog/`** (picker links remote manuals on **[LEMON Manuals](https://lemon-manuals.la/)**). Rebuild both ZIPs from a clean clone or your working tree:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\build_github_release_zips.ps1" -Label "LEMON"
+```
+
+Outputs land in **`release/`** (gitignored) with a UTC timestamp in the name, for example `Open-Vehicle-Database-FullScreen-LEMON-20260406120000.zip` and `Open-Vehicle-Database-Windows-LEMON-20260406120000.zip`. Rename to your GitHub asset names if needed, upload each to the matching Release, and note **[https://lemon-manuals.la/](https://lemon-manuals.la/)** in the release description.
+
 ---
 
 ## Contributing
