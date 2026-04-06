@@ -18,7 +18,14 @@ import argparse
 import json
 import os
 import re
+import sys
 from pathlib import Path
+
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+
+from charm_label_split import split_model_engine
 
 def parse_title(first_folder_name: str) -> tuple[int | None, str | None, str | None]:
     """Parse leading year, make token, and remainder from CHARM-style folder title."""
@@ -62,21 +69,6 @@ def parse_charm_or_fallback(segment: str) -> tuple[int | None, str | None, str |
     if mk:
         return y, mk, rest
     return parse_fallback_folder(segment)
-
-
-def split_model_engine(rest_after_make: str) -> tuple[str, str]:
-    """
-    Split CHARM remainder into a model line and an engine line.
-    Engine is detected at the first L#/V# displacement token (e.g. L4-1590cc, V6-3.0L).
-    """
-    rest = (rest_after_make or "").strip()
-    if not rest:
-        return "", ""
-    m = re.search(r"\s((?:L\d|V\d)\d*-\S+)", rest)
-    if not m:
-        return rest, ""
-    cut = m.start() + 1
-    return rest[:cut].strip(), rest[cut:].strip()
 
 
 def _meta_for_pdf_entry(

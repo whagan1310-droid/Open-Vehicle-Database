@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 import time
 import urllib.error
 import urllib.parse
@@ -35,19 +36,13 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+
+from charm_label_split import split_model_engine
+
 UA = "Open-Vehicle-Database-vehicle-cache/1.0 (community mirror; +https://github.com)"
-
-# Same heuristic as scripts/build_charm_manifest.split_model_engine
-def split_model_engine(rest_after_make: str) -> tuple[str, str]:
-    rest = (rest_after_make or "").strip()
-    if not rest:
-        return "", ""
-    m = re.search(r"\s((?:L\d|V\d)\d*-\S+)", rest)
-    if not m:
-        return rest, ""
-    cut = m.start() + 1
-    return rest[:cut].strip(), rest[cut:].strip()
-
 
 LINK_RE = re.compile(r'<li><a href="(/[^"]+/)">([^<]+)</a>')
 

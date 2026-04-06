@@ -543,6 +543,17 @@ async function main() {
         if (eng) {
           subset = subset.filter((row) => engineKeyRemote(row) === eng);
         }
+        if (!subset.length && eng) {
+          // Parser / label drift: show all manuals for this model instead of a dead end.
+          subset = remote.filter((row) => remoteModelKey(row) === mod);
+          if (subset.length) {
+            status(
+              "No exact engine match — open one of the manuals for this model below (new tab)."
+            );
+            showRemoteResults(subset);
+            return;
+          }
+        }
         if (!subset.length) {
           listEl.classList.add("hidden");
           listEl.innerHTML = "";
